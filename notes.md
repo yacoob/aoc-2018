@@ -14,6 +14,19 @@ Hopefully I'll have enough time to tackle most/all of the problems.
   deallocation at the end of their lifecycle aren't copied during assignments
   and function calls.
   [More here](https://doc.rust-lang.org/book/2018-edition/ch04-01-what-is-ownership.html#ownership-and-functions).
+* In part A, at few moments I felt that there *has* to be a more elegant
+  solution than looping through a collection. Now I need to read about lambdas
+  :D
+* The difference between `str` and `String` isn't all that clear to me yet.
+  I mean, sure, the difference in memory allocation and the way they can behave
+  is clear, but the way they are interchangeable thanks to `String`'s traits is
+  bit of a mystery.
+* Need to carve out the file ingestion function to separate module.
+* Used `Option<char>`! It was supper effe... well, it was new at least. On that
+  note, I wonder how many things a more experienced Rustacean would change in my
+  code. I feel like I tend to fall back to conditional and loops as they're what
+  I'm most familiar with. Bit like writing Python without using list
+  comprehension: possible, bit verbose, not as much fun.
 
 
 ## Puzzle #1
