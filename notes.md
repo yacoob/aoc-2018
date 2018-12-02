@@ -8,6 +8,14 @@ fun, and not necessarily to make the code most efficient or safe.
 
 Hopefully I'll have enough time to tackle most/all of the problems.
 
+## Puzzle #2
+
+* `&` usage from yesterday bit explained: complex types that require
+  deallocation at the end of their lifecycle aren't copied during assignments
+  and function calls.
+  [More here](https://doc.rust-lang.org/book/2018-edition/ch04-01-what-is-ownership.html#ownership-and-functions).
+
+
 ## Puzzle #1
 
 In retrospect, tackling this with reading only 5 chapters of ["Rust by
