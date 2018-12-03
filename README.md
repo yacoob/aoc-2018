@@ -8,6 +8,10 @@ fun, and not necessarily to make the code most efficient or safe.
 
 Hopefully I'll have enough time to tackle most/all of the problems.
 
+Idea for later: if I end up liking Rust, come back and try to rewrite the
+solutions to be more idiomatic. Or faster. Or both.
+
+
 ## Puzzle #2
 
 * `&` usage from yesterday bit explained: complex types that require
@@ -27,6 +31,9 @@ Hopefully I'll have enough time to tackle most/all of the problems.
   code. I feel like I tend to fall back to conditional and loops as they're what
   I'm most familiar with. Bit like writing Python without using list
   comprehension: possible, bit verbose, not as much fun.
+* interesting approach to part B that I've seen: take a box id, replace one
+  character by marker (`_`), save in a set if it's not already there
+  [(link)](https://www.reddit.com/r/adventofcode/comments/a2damm/2018_day2_part_2_a_linear_time_solution/eaxco3u/).
 
 
 ## Puzzle #1
