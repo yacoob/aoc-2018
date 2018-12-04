@@ -29,8 +29,9 @@ fn main() {
         });
     }
 
-    // Paint the map with rectangle ids. Just like with normal paint, only last id is visible. If
-    // we're painting over an existing id, mark both old rectangle id and current one as tainted.
+    // Paint the fabric with rectangle ids. Just like with normal paint, only last (topmost) id is
+    // visible. If we're painting over an existing id, mark both old rectangle id and current one
+    // as tainted.
     let mut fabric = vec![vec![0usize; 1000]; 1000];
     let mut tainted: HashMap<usize, bool> = HashMap::new();
     for r in rectangles {

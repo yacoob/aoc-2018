@@ -13,7 +13,7 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## Puzzle #3
-* Started late, had a break just before end of part a. Not sure how sustainable
+* Started late, had a break just before end of part A. Not sure how sustainable
   it'll be to do those puzzles in the evenings; I have a late thing tomorrow.
 * Yeah, I've read about structs today. Does it show? 8)
 * Initially, I've been parsing the line with `.split_whitespace()` as `regex`

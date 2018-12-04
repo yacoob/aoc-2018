@@ -26,7 +26,7 @@ fn main() {
         });
     }
 
-    // Paint the map; if a square is already painted, add it to overlapping squares set.
+    // Paint the fabric; add 1 for every rectangle covering given square.
     let mut fabric = vec![vec![0usize; 1000]; 1000];
     for r in rectangles {
         for i in r.x..r.x + r.w {
