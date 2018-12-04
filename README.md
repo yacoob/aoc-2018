@@ -30,6 +30,9 @@ solutions to be more idiomatic. Or faster. Or both.
   taking `(&id, &tainted)` as argument, so that's also a bit meh. Any better way?
 * I need to check where all those structures were created; I think tuples are
   always on stack, so I was running a chance of overflowing the stack in part A.
+* After doing part B, I've came back to part A and redone it with `Vec`; it
+  looks cleaner, but I'm bit lost as to why do I need `&&` inside that last
+  lambda.
 
 
 ## Puzzle #2

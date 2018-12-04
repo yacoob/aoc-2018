@@ -1,13 +1,12 @@
 extern crate regex;
 use regex::Regex;
-use std::collections::HashSet;
 
 #[derive(Debug)]
 struct Rectangle {
-    x: u16,
-    y: u16,
-    w: u16,
-    h: u16,
+    x: usize,
+    y: usize,
+    w: usize,
+    h: usize,
 }
 
 fn main() {
@@ -28,19 +27,14 @@ fn main() {
     }
 
     // Paint the map; if a square is already painted, add it to overlapping squares set.
-    let mut fabric: HashSet<(u16, u16)> = HashSet::new();
-    let mut overlaps = fabric.clone();
+    let mut fabric = vec![vec![0usize; 1000]; 1000];
     for r in rectangles {
-        for i in r.x + 1..=r.x + r.w {
-            for j in r.y + 1..=r.y + r.h {
-                let p = (i, j);
-                if fabric.contains(&p) {
-                    overlaps.insert(p);
-                } else {
-                    fabric.insert(p);
-                }
+        for i in r.x..r.x + r.w {
+            for j in r.y..r.y + r.h {
+                fabric[i][j] += 1;
             }
         }
     }
-    println!("Found {} overlapping square inches.", overlaps.len());
+    let overlaps = fabric.iter().flatten().filter(|&&x| x > 1).count();
+    println!("Found {} overlapping square inches.", overlaps);
 }
