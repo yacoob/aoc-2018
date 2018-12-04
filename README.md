@@ -12,6 +12,26 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## Puzzle #3
+* Started late, had a break just before end of part a. Not sure how sustainable
+  it'll be to do those puzzles in the evenings; I have a late thing tomorrow.
+* Yeah, I've read about structs today. Does it show? 8)
+* Initially, I've been parsing the line with `.split_whitespace()` as `regex`
+  crate is not in `std` (why?). It was getting too tedious, so I've used
+  `regex`.
+* Fencepost errors. I knew I'll have at least one with a puzzle like this.
+* One day I'll learn proper error handling. Until then, there are `asserts` and
+  trust in puzzle's description.
+* write code, dump resulting structure via `Debug` print, grep for one `false`
+  that should be there, submit answer, spend next half an hour playing with
+  a functional chain that will collapse that structure into nice single integer :D
+* Speaking of which, `filter_map` is nice, but that condition inside is bit
+  ugly. Having separate `filter` and `map` would require having two lambdas
+  taking `(&id, &tainted)` as argument, so that's also a bit meh. Any better way?
+* I need to check where all those structures were created; I think tuples are
+  always on stack, so I was running a chance of overflowing the stack in part A.
+
+
 ## Puzzle #2
 
 * `&` usage from yesterday bit explained: complex types that require
