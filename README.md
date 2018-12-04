@@ -34,6 +34,12 @@ solutions to be more idiomatic. Or faster. Or both.
   looks cleaner, but I'm bit lost as to why do I need `&&` inside that last
   lambda.
 
+### Other people did this
+* Not only make a struct for each rectangle, but also implement `from_string`
+  for it, which parses an input line.
+  [Neat](https://github.com/k0nserv/advent-of-rust-2018/blob/master/src/day03.rs#L25)
+
+
 
 ## Puzzle #2
 
@@ -54,8 +60,10 @@ solutions to be more idiomatic. Or faster. Or both.
   code. I feel like I tend to fall back to conditional and loops as they're what
   I'm most familiar with. Bit like writing Python without using list
   comprehension: possible, bit verbose, not as much fun.
-* interesting approach to part B that I've seen: take a box id, replace one
-  character by marker (`_`), save in a set if it's not already there
+
+### Other people did this
+* Take a box id, replace one character by marker (`_`), save in a set if it's
+  not already there.
   [(link)](https://www.reddit.com/r/adventofcode/comments/a2damm/2018_day2_part_2_a_linear_time_solution/eaxco3u/).
 
 
