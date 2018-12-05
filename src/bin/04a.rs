@@ -3,7 +3,7 @@ use regex::Regex;
 use std::collections::HashMap;
 
 // Pretty printing for sleep schedules to make comparisons against example easier.
-fn print_schedule(guard_id: &usize, date: &str, hour: &Vec<usize>) {
+fn _print_schedule(guard_id: &usize, date: &str, hour: &Vec<usize>) {
     print!("{} {:>4}  ", date, guard_id);
     for i in 0..hour.len() {
         print!("{}", if hour[i] == 1 { "#" } else { "." });
@@ -57,9 +57,29 @@ fn main() {
         }
     }
 
-    for (guard, days) in sleeping_patterns {
-        for (date,hour) in days {
-            print_schedule(&guard, date, &hour);
+    // Find the biggest sleeper
+    let mut total_sleep: HashMap<usize, usize> = HashMap::new();
+    // This can be converted to a chain of functional calls for sure - but I'm tired.
+    for (guard, days) in sleeping_patterns.iter() {
+        for (_, hour) in days {
+            let minutes_of_sleep = hour.iter().filter(|&&x| x>0).count();
+            let s = total_sleep.entry(*guard).or_insert(0);
+            *s += minutes_of_sleep;
         }
     }
+    let sleepiest_guard = total_sleep.iter().max_by_key(|x| x.1).unwrap().0;
+    println!("Guard #{} was the heaviest sleeper.", sleepiest_guard);
+
+    let mut days_asleep: HashMap<usize, usize> = HashMap::new();
+    // println!("{:?}", &sleeping_patterns.get(sleepiest_guard).unwrap());
+    for (_, hour) in sleeping_patterns.get(sleepiest_guard).unwrap().iter() {
+        for i in 0..hour.len() {
+            if hour[i] == 1 {
+                let d = days_asleep.entry(i).or_insert(0);
+                *d += 1
+            }
+        }
+    }
+    let favourite_minute = days_asleep.iter().max_by_key(|x| x.1).unwrap().0;
+    println!("Their favourite minute to nap: {}", favourite_minute);
 }
