@@ -12,14 +12,11 @@ fn main() {
     while n < polymer.len() {
         let current_unit = polymer[n];
         // Detect and handle a reaction.
-        // I wonder if there's a more concise way to write the comparisons here.
-        if previous_unit.to_lowercase().to_string() == current_unit.to_lowercase().to_string() {
-            if previous_unit.is_lowercase() && current_unit.is_uppercase() || previous_unit.is_uppercase() && current_unit.is_lowercase() {
-                polymer.remove(n);
-                polymer.remove(n-1);
-                n = if n>1 { n-2 } else { 0 };
-                continue;
-            }
+        if previous_unit.eq_ignore_ascii_case(&current_unit) && current_unit != previous_unit {
+            polymer.remove(n);
+            polymer.remove(n-1);
+            n = if n>1 { n-2 } else { 0 };
+            continue;
         }
         // No reaction at this position, advance scan position.
         n += 1;
