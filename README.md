@@ -15,6 +15,10 @@ solutions to be more idiomatic. Or faster. Or both.
 ## 5th of December, puzzle #5
 * It's kind of a good thing, that Rust's `regex` doesn't support backreferences.
   I'd *so* very much trade one problem for two. :D
+* Why can't Rust debug print a slice of a
+  [vector of ints](https://play.rust-lang.org/?version=stable&mode=debug&edition=2015&gist=e92b3fe86ad61b68a8c6d623e2fdb416)?
+  Adding a reference there works, but I'm unsure why wouldn't it work without
+  one in the first place.
 
 
 ## 5th of December, puzzle #4
