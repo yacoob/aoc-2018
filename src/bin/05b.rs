@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 fn main() {
-    let input = include_str!("../../inputs/05");
-    let original_polymer: Vec<char> = input.trim().chars().collect();
+    let input = include_str!("../../inputs/05").trim();
+    let original_polymer: Vec<char> = input.chars().collect();
     println!("Welcome to Aperture Science Polymer Reaction, Scanning and Optimisation Chamber!");
     println!("Processing a polymer with starting length of {} units.", &input.len());
 
