@@ -13,6 +13,10 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## Puzzle #4
+As expected, starting at midnight is counterproductive. I really need to figure
+out something else. Probably slow down.
+
+### Preliminary notes
 * Had to switch to Rust 2018.
 * Couldn't alias type as it required a lifetime specification, and I know
   nothing about those yet :D
