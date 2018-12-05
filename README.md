@@ -12,10 +12,32 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 5th of December, puzzle #5
+* It's kind of a good thing, that Rust's `regex` doesn't support backreferences.
+  I'd *so* very much trade one problem for two. :D
+
+
 ## 5th of December, puzzle #4
+* RE: time management: **I'll try not to stay up with AoC past 22:30**. Which
+  might mean I won't do anything for some days. Now, should I try to catch up or
+  leave the puzzles for later...?
 * `rustup doc` opens local documentation in a browser; it's a tad bit faster for
   looking up specific methods (online version lags a between loading a page and
   jumping to correct anchor).
+* In retrospect, the actual day number wasn't relevant for neither part A or
+  B of the puzzle; knowing this would simplify the structures. I could see that
+  in part A, but thought it might be relevant for part B. Nerdsniped, eh? It's
+  a good thing that I didn't end up implementing something akin to Python's
+  `datetime`.
+* Learned a thing in `Vim`: `Ctrl-w, H/J/KL` move current window to requested
+  position, redoing the split in the process. Nice way to switch from horizontal
+  to vertical split.
+* I don't feel comfortable with borrowing just yet. Especially, when I'm mucking
+  around with iterators and chain in `parse` or `unwrap`, I always get lost on
+  whether I'm dealing with a reference or actual value.
+* Similarily, not enough functional. Granted, simpler data structure would also
+  help, but I feel like I couuld shorten a **lot** of `04a` with a careful use
+  of `flatten`.
 
 
 ## 4th of December, puzzle #4
