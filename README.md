@@ -12,6 +12,12 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## Puzzle #4
+* Had to switch to Rust 2018.
+* Couldn't alias type as it required a lifetime specification, and I know
+  nothing about those yet :D
+
+
 ## Puzzle #3
 * Started late, had a break just before end of part A. Not sure how sustainable
   it'll be to do those puzzles in the evenings; I have a late thing tomorrow.
