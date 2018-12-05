@@ -12,17 +12,27 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
-## Puzzle #4
+## 5th of December, puzzle #4
+* `rustup doc` opens local documentation in a browser; it's a tad bit faster for
+  looking up specific methods (online version lags a between loading a page and
+  jumping to correct anchor).
+
+
+## 4th of December, puzzle #4
 As expected, starting at midnight is counterproductive. I really need to figure
 out something else. Probably slow down.
 
 ### Preliminary notes
-* Had to switch to Rust 2018.
+* Had to switch to Rust 2018, to avail of
+  [non-lexical lifetimes](https://rust-lang-nursery.github.io/edition-guide/rust-2018/ownership-and-lifetimes/non-lexical-lifetimes.html).
+  I mean, I could have worked around it with an extra pair of braces, to create
+  extra inner scope, but the release date for Rust 2018 is *tomorrow*, so
+  I might as well start using it now.
 * Couldn't alias type as it required a lifetime specification, and I know
   nothing about those yet :D
 
 
-## Puzzle #3
+## 3th of December, puzzle #3
 * Started late, had a break just before end of part A. Not sure how sustainable
   it'll be to do those puzzles in the evenings; I have a late thing tomorrow.
 * Yeah, I've read about structs today. Does it show? 8)
@@ -50,8 +60,7 @@ out something else. Probably slow down.
   [Neat](https://github.com/k0nserv/advent-of-rust-2018/blob/master/src/day03.rs#L25)
 
 
-
-## Puzzle #2
+## 2nd of December, puzzle #2
 
 * `&` usage from yesterday bit explained: complex types that require
   deallocation at the end of their lifecycle aren't copied during assignments
@@ -77,7 +86,7 @@ out something else. Probably slow down.
   [(link)](https://www.reddit.com/r/adventofcode/comments/a2damm/2018_day2_part_2_a_linear_time_solution/eaxco3u/).
 
 
-## Puzzle #1
+## 1st of December, puzzle #1
 
 In retrospect, tackling this with reading only 5 chapters of ["Rust by
 example"](https://doc.rust-lang.org/rust-by-example) might have been bit
