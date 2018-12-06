@@ -4,7 +4,10 @@ fn main() {
     let input = include_str!("../../inputs/05").trim();
     let original_polymer: Vec<char> = input.chars().collect();
     println!("Welcome to Aperture Science Polymer Reaction, Scanning and Optimisation Chamber!");
-    println!("Processing a polymer with starting length of {} units.", &input.len());
+    println!(
+        "Processing a polymer with starting length of {} units.",
+        &input.len()
+    );
 
     let all_units: Vec<char> = "abcdefghijklmnopqrstuvwxyz".chars().collect();
     let mut efficiency: HashMap<char, usize> = HashMap::new();
@@ -26,8 +29,8 @@ fn main() {
             // Detect and handle a reaction.
             if previous_unit.eq_ignore_ascii_case(&current_unit) && current_unit != previous_unit {
                 polymer.remove(n);
-                polymer.remove(n-1);
-                n = if n>1 { n-2 } else { 0 };
+                polymer.remove(n - 1);
+                n = if n > 1 { n - 2 } else { 0 };
                 continue;
             }
             n += 1;
@@ -37,5 +40,8 @@ fn main() {
         efficiency.insert(removed_unit, polymer.len());
     }
 
-    println!("Shortest polymer is {} units long.", efficiency.values().min().unwrap());
+    println!(
+        "Shortest polymer is {} units long.",
+        efficiency.values().min().unwrap()
+    );
 }
