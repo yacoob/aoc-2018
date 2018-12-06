@@ -33,9 +33,11 @@ solutions to be more idiomatic. Or faster. Or both.
 * RE: time management: **I'll try not to stay up with AoC past 22:30**. Which
   might mean I won't do anything for some days. Now, should I try to catch up or
   leave the puzzles for later...?
-* `rustup doc` opens local documentation in a browser; it's a tad bit faster for
+* `rustup doc` opens local documentation in a browser; ~~it's a tad bit faster for
   looking up specific methods (online version lags a between loading a page and
-  jumping to correct anchor).
+  jumping to correct anchor).~~ Local documentation also suffers from the problem;
+  there's a
+  [huge jsified index being loaded on every page](https://github.com/rust-lang/rust/issues/56545).
 * In retrospect, the actual day number wasn't relevant for neither part A or
   B of the puzzle; knowing this would simplify the structures. I could see that
   in part A, but thought it might be relevant for part B. Nerdsniped, eh? It's
