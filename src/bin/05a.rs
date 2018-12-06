@@ -5,14 +5,13 @@ fn main() {
 
     // Go through the polymer left to right, check characters, add them to final_polymer
     // when appropriate.
-    let mut final_polymer: Vec<char> = Vec::new();
+    let mut final_polymer = Vec::new();
     for unit in input.chars() {
         // Check last unit of the final_polymer (will be None on empty polymer), compare to
         // current unit.
-        if final_polymer.last().map(|&previous| previous.eq_ignore_ascii_case(&unit) && previous != unit).unwrap_or(false) {
-            final_polymer.pop();
-        } else {
-            final_polymer.push(unit);
+        match final_polymer.last().cloned() {
+            Some(previous) if previous.eq_ignore_ascii_case(&unit) && previous != unit => {final_polymer.pop();}
+            _ => final_polymer.push(unit)
         }
     }
 
