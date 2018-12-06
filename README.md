@@ -20,6 +20,14 @@ solutions to be more idiomatic. Or faster. Or both.
   Adding a reference there works, but I'm unsure why wouldn't it work without
   one in the first place.
 
+### Other people did this
+* Instead of tracking position and last character, you can just walk through the
+  input left to right and
+  [push/pop units to output as necessary](https://github.com/ttencate/aoc2018/blob/master/src/bin/05.rs).
+  It has also made me realise that
+  [Option::map](https://doc.rust-lang.org/std/option/enum.Option.html#method.map)
+  is a thing, so I've decided to incorporate this. :3
+
 
 ## 5th of December, puzzle #4
 * RE: time management: **I'll try not to stay up with AoC past 22:30**. Which
