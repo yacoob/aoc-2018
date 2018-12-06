@@ -1,28 +1,20 @@
 fn main() {
-    let input = include_str!("../../inputs/05");
-    let mut polymer: Vec<char> = input.trim().chars().collect();
+    let input = include_str!("../../inputs/05").trim();
     println!("Welcome to Aperture Science Polymer Reaction and Scanning Chamber!");
-    println!("Processing a polymer with starting length of {} units.", &polymer.len());
+    println!("Processing a polymer with starting length of {} units.", input.len());
 
-    // Scan polymer from left to right, keeping track of position and previous unit.
-    // Once reaction is detected, remove current and previous unit, move scan position to
-    // previous-previous unit and continue scanning.
-    let mut n = 1;
-    let mut previous_unit = polymer[0];
-    while n < polymer.len() {
-        let current_unit = polymer[n];
-        // Detect and handle a reaction.
-        if previous_unit.eq_ignore_ascii_case(&current_unit) && current_unit != previous_unit {
-            polymer.remove(n);
-            polymer.remove(n-1);
-            n = if n>1 { n-2 } else { 0 };
-            continue;
+    // Go through the polymer left to right, check characters, add them to final_polymer as
+    // if appropriate.
+    let mut final_polymer: Vec<char> = Vec::new();
+    for unit in input.chars() {
+        // Check last unit of the final_polymer (will be None on empty polymer), compare to
+        // current unit.
+        if final_polymer.last().map(|&previous| previous.eq_ignore_ascii_case(&unit) && previous != unit).unwrap_or(false) {
+            final_polymer.pop();
+        } else {
+            final_polymer.push(unit);
         }
-        // No reaction at this position, advance scan position.
-        n += 1;
-        previous_unit = current_unit;
     }
 
-    let final_polymer: String = polymer.iter().collect();
     println!("Final polymer is {} units long", final_polymer.len());
 }
