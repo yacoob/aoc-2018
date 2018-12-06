@@ -3,8 +3,8 @@ fn main() {
     println!("Welcome to Aperture Science Polymer Reaction and Scanning Chamber!");
     println!("Processing a polymer with starting length of {} units.", input.len());
 
-    // Go through the polymer left to right, check characters, add them to final_polymer as
-    // if appropriate.
+    // Go through the polymer left to right, check characters, add them to final_polymer
+    // when appropriate.
     let mut final_polymer: Vec<char> = Vec::new();
     for unit in input.chars() {
         // Check last unit of the final_polymer (will be None on empty polymer), compare to
