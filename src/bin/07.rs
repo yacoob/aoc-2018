@@ -122,10 +122,14 @@ fn part1(steps: &[Step]) -> String {
 
 fn part2(steps: &[Step], total_workers: i32, fixed_cost: i32) -> i32 {
     // Elves, assemble!
+    // steps will keep outstanding steps to be done.
     let mut steps = steps.to_owned();
+    // workers is just a bunch of Santa's Little Helpers :D
     let mut workers: Vec<SantaLittleHelper> =
         (1..=total_workers).map(SantaLittleHelper::new).collect();
+    // We'll store any steps finished in given cycle here; for display and tracking.
     let mut completed_steps = String::with_capacity(steps.len());
+    // Just a wall clock, we'll use it for measuring work time.
     let mut clock = 0;
     // Print a header for the timesheet.
     print!("clock\t");

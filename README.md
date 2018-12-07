@@ -12,6 +12,34 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 7th of December, puzzle #7
+* This code turned out to be beefier than I expected. This is usually a sign
+  that same thing could have been done in a more concise way :D
+* Finally used `clippy`; it only checks things that are being compiled, which
+  means that if you run it twice there'll be no output on the second run.
+* Added some tests in the same file; this forced me to split code into
+  functions; this in turn made me add `asserts` to `main`, to make sure I don't
+  break the code while I refactor it.
+* `<small>`I got lost while looking at another solution, due to the fact that it
+  was using proper English math terms for bits of graph, and I don't know this
+  terminology well :o`</small>`
+* `clippy` suggested to use `.or_insert_with(|| Step::new(foo))` to avoid
+  calling `Step::new()` regardless whether `HashMap`'s key exist or not. Took me
+  some time to understand that it's a lambda that takes no parameters, instead
+  of logical operator with no left argument. Now it makes sense - make a lambda
+  that captures `foo`, pass it to `or_insert_with`, save one function call.
+* Couldn't get `clippy` to play nicely with Vim.
+* I got an impression that sometimes syntax errors were not caught by Syntastic
+  in the test section.
+* What should I use for things like default value of `last_worked_on`? Given
+  that I *need* to have a value, I end up using a sentinel value, which isn't
+  not ideal.
+* Given that part B produces more output than usual, I ended up using
+  `eprintln!` for debug output.
+* At one point I've used `BinaryHeap<Step>` to keep `steps`. Alas, there's no free
+  launch, and nothing will rearrange the heap for me, if I go behind heap's
+  back and change step's `prerequisites`.
+
 ## 6th of December, puzzle #6
 * I've found a reviewer for the style of my Rust code. Thanks, @Lucretiel!
 * I'll most likely take a day off the schedule; I need to get some other
