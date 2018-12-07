@@ -63,11 +63,15 @@ impl PartialOrd for Step {
     }
 }
 
-fn parse_input(file: &str) -> Vec<Step> {
-    // Read the input.
+fn read_file(path: &str) -> String {
     let mut input = String::new();
-    let mut file = File::open(file).unwrap();
-    file.read_to_string(&mut input).unwrap();
+    // Read the input.
+    let mut f = File::open(path).unwrap();
+    f.read_to_string(&mut input).unwrap();
+    input
+}
+
+fn parse_input(input: &str) -> Vec<Step> {
     let re = Regex::new(
         r"Step (?P<prerequisite>\D) must be finished before step (?P<target>\D) can begin.",
     )
@@ -81,7 +85,7 @@ fn parse_input(file: &str) -> Vec<Step> {
     // We use a hash here during input reading for convenience, as it's faster to check if step is
     // already there.
     let mut steps = HashMap::new();
-    for line in input.lines() {
+    for line in input.trim().lines() {
         let caps = re.captures(line).unwrap();
         let target_step_name = caps
             .name("target")
@@ -214,18 +218,49 @@ fn part2(steps: &[Step], total_workers: i32, fixed_cost: i32) -> i32 {
 }
 
 fn main() {
-    let file = "inputs/07";
-    let steps = parse_input(file);
+    let filename = "inputs/07";
+    let number_of_workers = 5;
+    let static_work_cost = 60;
+
+    let input = read_file(filename);
+    let steps = parse_input(&input);
     let step_sequence = part1(&steps);
     assert_eq!(step_sequence, "GRTAHKLQVYWXMUBCZPIJFEDNSO");
     println!(
         "Here's the sequence of steps for a single worker: {}",
         step_sequence
     );
-    let time_elapsed = part2(&steps, 5, 60);
+    let time_elapsed = part2(&steps, number_of_workers, static_work_cost);
     assert_eq!(time_elapsed, 1115);
     println!(
         "We're done with construction; it only took us {} seconds.",
         time_elapsed
     );
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const INPUT: &str = r#"
+Step C must be finished before step A can begin.
+Step C must be finished before step F can begin.
+Step A must be finished before step B can begin.
+Step A must be finished before step D can begin.
+Step B must be finished before step E can begin.
+Step D must be finished before step E can begin.
+Step F must be finished before step E can begin.
+"#;
+
+    #[test]
+    fn test_part1() {
+        let steps = parse_input(INPUT);
+        assert_eq!(part1(&steps), "CABDFE");
+    }
+
+    #[test]
+    fn test_part2() {
+        let steps = parse_input(INPUT);
+        assert_eq!(part2(&steps, 2, 0), 15);
+    }
 }
