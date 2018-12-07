@@ -12,6 +12,19 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 6th of December, puzzle #6
+* I've found a reviewer for the style of my Rust code. Thanks, @Lucretiel!
+* I'll most likely take a day off the schedule; I need to get some other
+  entertainment, and read up more of the Rust book.
+* I got to write a method, a class method and a trait for my struct!
+* Entertained a thought of going after something more sophisticated in terms of
+  Voronoi partition for a very short moment. Then I got better.
+* First I sorted a vector full of tuples, only then I've noticed that it Just
+  Works[tm].
+  [Ord trait](https://doc.rust-lang.org/std/primitive.tuple.html#impl-Ord)?
+* Part B was suspiciously easy, easier than part A.
+
+
 ## 5th of December, puzzle #5
 * It's kind of a good thing, that Rust's `regex` doesn't support backreferences.
   I'd *so* very much trade one problem for two. :D
@@ -19,6 +32,7 @@ solutions to be more idiomatic. Or faster. Or both.
   [vector of ints](https://play.rust-lang.org/?version=stable&mode=debug&edition=2015&gist=e92b3fe86ad61b68a8c6d623e2fdb416)?
   Adding a reference there works, but I'm unsure why wouldn't it work without
   one in the first place.
+
 
 ### Other people did this
 * Instead of tracking position and last character, you can just walk through the
