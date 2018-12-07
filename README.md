@@ -19,6 +19,7 @@ solutions to be more idiomatic. Or faster. Or both.
   [vector of ints](https://play.rust-lang.org/?version=stable&mode=debug&edition=2015&gist=e92b3fe86ad61b68a8c6d623e2fdb416)?
   Adding a reference there works, but I'm unsure why wouldn't it work without
   one in the first place.
+      * You're doing a `Display` print, not a `Debug` print. I'm actually not sure how you got it to work with a reference. You need to replace `"{}"` with `"{:?}"`, or `"{:#?}` for a pretty print (indented and newlined)
 
 ### Other people did this
 * Instead of tracking position and last character, you can just walk through the
