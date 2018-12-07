@@ -3,8 +3,10 @@ use regex::Regex;
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::collections::HashSet;
+use std::fs::File;
+use std::io::prelude::*;
 
-#[derive(Eq, PartialEq, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 struct Step {
     name: char,
     prerequisites: HashSet<char>,
@@ -61,9 +63,11 @@ impl PartialOrd for Step {
     }
 }
 
-fn main() {
+fn parse_input(file: &str) -> Vec<Step> {
     // Read the input.
-    let input = include_str!("../../inputs/07").trim();
+    let mut input = String::new();
+    let mut file = File::open(file).unwrap();
+    file.read_to_string(&mut input).unwrap();
     let re = Regex::new(
         r"Step (?P<prerequisite>\D) must be finished before step (?P<target>\D) can begin.",
     )
@@ -109,10 +113,30 @@ fn main() {
     // With all steps gathered, we can turn steps hash into a vector.
     let mut steps: Vec<Step> = steps.drain().map(|(_, v)| v).collect();
     steps.sort();
+    steps
+}
 
+fn part1(steps: &[Step]) -> String {
+    // Time to work out the sequence of steps.
+    let mut steps = steps.to_owned();
+    let mut step_sequence = String::with_capacity(steps.len());
+    while !steps.is_empty() {
+        // Take the first step, which should have no deps, and add it to the sequence.
+        let current_step = steps.remove(0);
+        assert_eq!(current_step.prerequisites.len(), 0);
+        step_sequence.push(current_step.name);
+        // Remove current_step from dependencies of all outstanding steps.
+        for step in steps.iter_mut() {
+            step.prerequisites.remove(&current_step.name);
+        }
+        steps.sort();
+    }
+    step_sequence
+}
+
+fn part2(steps: &[Step], total_workers: i32, fixed_cost: i32) -> i32 {
     // Elves, assemble!
-    let total_workers = 5;
-    let fixed_cost = 60;
+    let mut steps = steps.to_owned();
     let mut workers: Vec<SantaLittleHelper> =
         (1..=total_workers).map(SantaLittleHelper::new).collect();
     let mut completed_steps = String::with_capacity(steps.len());
@@ -186,8 +210,22 @@ fn main() {
     }
     // We're done!
     println!("{:->60}", "");
+    clock - 1
+}
+
+fn main() {
+    let file = "inputs/07";
+    let steps = parse_input(file);
+    let step_sequence = part1(&steps);
+    assert_eq!(step_sequence, "GRTAHKLQVYWXMUBCZPIJFEDNSO");
+    println!(
+        "Here's the sequence of steps for a single worker: {}",
+        step_sequence
+    );
+    let time_elapsed = part2(&steps, 5, 60);
+    assert_eq!(time_elapsed, 1115);
     println!(
         "We're done with construction; it only took us {} seconds.",
-        clock - 1
+        time_elapsed
     );
 }
