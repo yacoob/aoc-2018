@@ -39,9 +39,13 @@ fn main() {
     // to gracefully implement Fortune's algorithm
     // https://en.wikipedia.org/wiki/Fortune%27s_algorithm
     let mut areas = vec![0; seeds.len()];
-    let max_size = 400; // eyeballed based on the numbers in the input.
-    for i in 0..max_size {
-        for j in 0..max_size {
+    // Determine the piece of map we're scanning.
+    let x_min = seeds.iter().map(|p| p.x).min().unwrap();
+    let y_min = seeds.iter().map(|p| p.y).min().unwrap();
+    let x_max = seeds.iter().map(|p| p.x).max().unwrap();
+    let y_max = seeds.iter().map(|p| p.y).max().unwrap();
+    for i in x_min..x_max {
+        for j in y_min..y_max {
             // Point being considered.
             let p = Point::new(i, j);
             // p_distances will contain tuples: (distance, seed_number)
@@ -59,7 +63,7 @@ fn main() {
             let closest_seed = p_distances[0].1;
             // If p is on the edge of the map, it means the seed it's closest to will claim an
             // infinite amount of points outside of the area of the map we're inspecting.
-            if p.x == 0 || p.y == 0 || p.x == max_size - 1 || p.y == max_size - 1 {
+            if p.x == x_min || p.y == y_min || p.x == x_max - 1 || p.y == y_max - 1 {
                 areas[closest_seed] = std::i32::MIN;
             }
             // Looks like it's a legitimate point, which has a closest_seed. Add one point for

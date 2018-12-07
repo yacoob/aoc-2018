@@ -29,16 +29,20 @@ impl fmt::Debug for Point {
 
 fn main() {
     // Read in all seed points.
-    let input = include_str!("../../inputs/06small").trim();
+    let input = include_str!("../../inputs/06").trim();
     let seeds: Vec<Point> = input.lines().map(|s| Point::from_str(s)).collect();
 
     // Go through entire square piece of the map; for every point calculate distance to all seed
     // points, sum those up, determine whether that point qualifies as safe.
     let safe_area_within = 10000;
-    let max_size = 400; // eyeballed based on the numbers in the input.
     let mut safe_area = 0;
-    for i in 0..max_size {
-        for j in 0..max_size {
+    // Determine the piece of map we're scanning.
+    let x_min = seeds.iter().map(|p| p.x).min().unwrap();
+    let y_min = seeds.iter().map(|p| p.y).min().unwrap();
+    let x_max = seeds.iter().map(|p| p.x).max().unwrap();
+    let y_max = seeds.iter().map(|p| p.y).max().unwrap();
+    for i in x_min..x_max {
+        for j in y_min..y_max {
             // Point being considered.
             let p = Point::new(i, j);
             let p_total_distance: i32 = seeds.iter().map(|seed| p.distance_to(seed)).sum();
