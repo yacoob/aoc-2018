@@ -25,7 +25,7 @@ impl Step {
 
     fn new(name: char) -> Step {
         Step {
-            name: name,
+            name,
             prerequisites: HashSet::new(),
         }
     }
@@ -95,7 +95,7 @@ fn main() {
             .unwrap();
         let target_step = steps
             .entry(target_step_name)
-            .or_insert(Step::new(target_step_name));
+            .or_insert_with(|| Step::new(target_step_name));
         target_step.depend_on(prerequisite_step_name);
         seen_targets.insert(target_step_name);
         seen_prerequisites.insert(prerequisite_step_name);
@@ -113,9 +113,8 @@ fn main() {
     // Elves, assemble!
     let total_workers = 5;
     let fixed_cost = 60;
-    let mut workers: Vec<SantaLittleHelper> = (1..=total_workers)
-        .map(|i| SantaLittleHelper::new(i))
-        .collect();
+    let mut workers: Vec<SantaLittleHelper> =
+        (1..=total_workers).map(SantaLittleHelper::new).collect();
     let mut completed_steps = String::with_capacity(steps.len());
     let mut clock = 0;
     // Print a header for the timesheet.
@@ -129,15 +128,15 @@ fn main() {
     loop {
         print!("{:>2}\t", clock);
         // Give every worker that is currently not working next outstanding unblocked step.
-        if steps.len() > 0 {
+        if !steps.is_empty() {
             for worker in &mut workers {
                 assert!(worker.work_left >= 0);
                 // Is this worker busy? Is there still anything to do?
-                if worker.work_left > 0 || steps.len() == 0 {
+                if worker.work_left > 0 || steps.is_empty() {
                     continue;
                 }
                 // Is there a next step without prerequisites?
-                if steps[0].prerequisites.len() > 0 {
+                if !steps[0].prerequisites.is_empty() {
                     // No unblocked steps, no more work for anyone in this second.
                     break;
                 }
@@ -175,12 +174,12 @@ fn main() {
         println!("{}", completed_steps);
 
         // Maybe we're done?
-        if steps.len() == 0 && !at_least_one_worker_busy {
+        if !at_least_one_worker_busy && steps.is_empty() {
             break;
         }
 
         // If any step got completed, make sure the outstanding steps are sorted.
-        if completed_this_cycle.len() > 0 {
+        if !completed_this_cycle.is_empty() {
             steps.sort();
             completed_steps.push_str(&completed_this_cycle);
         }
