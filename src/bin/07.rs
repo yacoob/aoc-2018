@@ -1,5 +1,3 @@
-extern crate regex;
-use regex::Regex;
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -72,10 +70,6 @@ fn read_file(path: &str) -> String {
 }
 
 fn parse_input(input: &str) -> Vec<Step> {
-    let re = Regex::new(
-        r"Step (?P<prerequisite>\D) must be finished before step (?P<target>\D) can begin.",
-    )
-    .unwrap();
     // Record names of steps we've seen in the input; we'll use it to identify possible starting
     // point.
     let mut seen_targets = HashSet::new();
@@ -86,21 +80,9 @@ fn parse_input(input: &str) -> Vec<Step> {
     // already there.
     let mut steps = HashMap::new();
     for line in input.trim().lines() {
-        let caps = re.captures(line).unwrap();
-        let target_step_name = caps
-            .name("target")
-            .unwrap()
-            .as_str()
-            .chars()
-            .nth(0)
-            .unwrap();
-        let prerequisite_step_name = caps
-            .name("prerequisite")
-            .unwrap()
-            .as_str()
-            .chars()
-            .nth(0)
-            .unwrap();
+        let words: Vec<&str> = line.split_whitespace().collect();
+        let target_step_name = words[7].chars().nth(0).unwrap();
+        let prerequisite_step_name = words[1].chars().nth(0).unwrap();
         let target_step = steps
             .entry(target_step_name)
             .or_insert_with(|| Step::new(target_step_name));
