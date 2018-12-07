@@ -1,8 +1,7 @@
+use aoc::*;
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::collections::HashSet;
-use std::fs::File;
-use std::io::prelude::*;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct Step {
@@ -59,14 +58,6 @@ impl PartialOrd for Step {
     fn partial_cmp(&self, other: &Step) -> Option<Ordering> {
         Some(self.cmp(other))
     }
-}
-
-fn read_file(path: &str) -> String {
-    let mut input = String::new();
-    // Read the input.
-    let mut f = File::open(path).unwrap();
-    f.read_to_string(&mut input).unwrap();
-    input
 }
 
 fn parse_input(input: &str) -> Vec<Step> {
