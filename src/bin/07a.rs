@@ -17,7 +17,7 @@ impl Step {
 
     fn new(name: char) -> Step {
         Step {
-            name: name,
+            name,
             deps: HashSet::new(),
         }
     }
@@ -75,7 +75,7 @@ fn main() {
             .unwrap();
         let target_step = steps
             .entry(target_step_name)
-            .or_insert(Step::new(target_step_name));
+            .or_insert_with(|| Step::new(target_step_name));
         target_step.depend_on(prerequisite_step_name);
         seen_targets.insert(target_step_name);
         seen_prerequisites.insert(prerequisite_step_name);
@@ -92,7 +92,7 @@ fn main() {
 
     // Time to work out the sequence of steps.
     let mut step_sequence = String::with_capacity(steps.len());
-    while steps.len() > 0 {
+    while !steps.is_empty() {
         // Take the first step, which should have no deps, and add it to the sequence.
         let current_step = steps.remove(0);
         assert_eq!(current_step.deps.len(), 0);
