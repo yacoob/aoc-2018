@@ -8,9 +8,9 @@ fn part1(foo: &i32) -> i32 {
     *foo
 }
 
-fn part2(foo: &i32) -> i32 {
-    *foo
-}
+// fn part2(foo: &i32) -> i32 {
+//     *foo
+// }
 
 fn main() {
     let filename = "inputs/01";
@@ -19,12 +19,12 @@ fn main() {
     let foo = parse_input(&input);
 
     let answer1 = part1(&foo);
-    assert_eq!(answer1, 3671);
+    // assert_eq!(answer1, 3671);
     println!("Part 1: {}", answer1);
 
-    let answer2 = part2(&foo);
-    assert_eq!(answer2, 3671);
-    println!("Part 2: {}", answer2);
+    // let answer2 = part2(&foo);
+    // assert_eq!(answer2, 3671);
+    // println!("Part 2: {}", answer2);
 }
 
 #[cfg(test)]
@@ -44,9 +44,9 @@ to kill me twice?
         assert_eq!(part1(&lyrics), 94);
     }
 
-    #[test]
-    fn test_part2() {
-        let lyrics = parse_input(INPUT);
-        assert_eq!(part1(&lyrics), 94);
-    }
+    // #[test]
+    // fn test_part2() {
+    //     let lyrics = parse_input(INPUT);
+    //     assert_eq!(part1(&lyrics), 94);
+    // }
 }
