@@ -198,15 +198,16 @@ fn main() {
     let filename = "inputs/07";
     let number_of_workers = 5;
     let static_work_cost = 60;
-
     let input = read_file(filename);
     let steps = parse_input(&input);
+
     let step_sequence = part1(&steps);
     assert_eq!(step_sequence, "GRTAHKLQVYWXMUBCZPIJFEDNSO");
     println!(
         "Here's the sequence of steps for a single worker: {}",
         step_sequence
     );
+
     let time_elapsed = part2(&steps, number_of_workers, static_work_cost);
     assert_eq!(time_elapsed, 1115);
     println!(
