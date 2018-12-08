@@ -23,6 +23,11 @@ solutions to be more idiomatic. Or faster. Or both.
 * `<small>`I got lost while looking at another solution, due to the fact that it
   was using proper English math terms for bits of graph, and I don't know this
   terminology well :o`</small>`
+  UPDATE: Looks like this puzzle maps to
+  [lexicographical topological sorting](https://en.wikipedia.org/wiki/Topological_sorting),
+  and the thing I've thrown together looks a bit like Kahn's algorithm :D Now,
+  the question is whether I'd have more fun implementing that algorithm based on
+  its description...
 * `clippy` suggested to use `.or_insert_with(|| Step::new(foo))` to avoid
   calling `Step::new()` regardless whether `HashMap`'s key exist or not. Took me
   some time to understand that it's a lambda that takes no parameters, instead
