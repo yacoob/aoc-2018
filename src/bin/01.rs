@@ -1,6 +1,5 @@
 use aoc::*;
-use std::collections::hash_map::Entry::{Occupied, Vacant};
-use std::collections::HashMap;
+use std::collections::HashSet;
 
 fn part1(input: &str) -> i32 {
     input.lines().map(|line| line.parse::<i32>().unwrap()).sum()
@@ -11,19 +10,16 @@ fn part2(input: &str) -> i32 {
     // Iterate through frequency changes:
     //  part B: find the frequency which is reached for a second time first, provided we keep
     //  applying the changes.
-    let mut seen_frequencies: HashMap<i32, bool> = HashMap::new();
-    seen_frequencies.insert(current_frequency, true);
+    let mut seen_frequencies: HashSet<i32> = HashSet::new();
+    seen_frequencies.insert(current_frequency);
     'outer: loop {
         for change in input.lines() {
             let delta: i32 = change.parse().unwrap();
             current_frequency += delta;
-            match seen_frequencies.entry(current_frequency) {
-                Occupied(_) => {
-                    break 'outer;
-                }
-                Vacant(entry) => {
-                    entry.insert(true);
-                }
+            if seen_frequencies.contains(&current_frequency) {
+                break 'outer;
+            } else {
+                seen_frequencies.insert(current_frequency);
             }
         }
     }
