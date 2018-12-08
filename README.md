@@ -12,6 +12,13 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 8th of December, puzzle #8
+* Number of times I've written `nods` instead of `nods`: `ETOOMANY`. *nods*
+* Syntax for a `for` loop going in reverse is slightly silly. `(a..b).rev()`,
+  really? :D Worse, I don't think I've seen a warning that `(i..j)` with `i>j`
+  is going to give you an empty range.
+
+
 ## 7th of December, puzzle #7
 * This code turned out to be beefier than I expected. This is usually a sign
   that same thing could have been done in a more concise way :D
@@ -44,6 +51,7 @@ solutions to be more idiomatic. Or faster. Or both.
 * At one point I've used `BinaryHeap<Step>` to keep `steps`. Alas, there's no free
   launch, and nothing will rearrange the heap for me, if I go behind heap's
   back and change step's `prerequisites`.
+
 
 ## 6th of December, puzzle #6
 * I've found a reviewer for the style of my Rust code. Thanks, @Lucretiel!
