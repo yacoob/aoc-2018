@@ -1,22 +1,22 @@
 use aoc::*;
 
-// Tree elements. Technically don't need the parent link for part A, but I have a feeling[tm].
-// expected_metadata_count is there only for sanity checking afterwards.
+// Tree elements.
 #[derive(Debug)]
 struct Node {
     index: usize,
-    parent: usize,
-    expected_metadata_count: usize,
+    children: Vec<usize>,
     metadata: Vec<usize>,
+    // We use this field only for sanity checking afterwards.
+    expected_metadata_count: usize,
 }
 
 impl Node {
-    fn new(index: usize, parent: usize, expected_metadata_count: usize) -> Node {
+    fn new(index: usize, expected_metadata_count: usize) -> Node {
         Node {
             index,
-            parent,
-            expected_metadata_count,
+            children: Vec::new(),
             metadata: Vec::with_capacity(expected_metadata_count),
+            expected_metadata_count,
         }
     }
 
@@ -49,7 +49,7 @@ fn parse_input(input: &str) -> Vec<Node> {
     // Parser stack. We'll push to it things we expect to see next in the input.
     let mut expected_elements: Vec<Element> = Vec::new();
     // Allocate the root node, and push expectations about it to the stack.
-    nodes.push(Node::new(0, 0, 0));
+    nodes.push(Node::new(0, 0));
     expected_elements.push(Element::NodeElement(0));
     // Are we expecting anything?
     while !expected_elements.is_empty() {
@@ -69,7 +69,9 @@ fn parse_input(input: &str) -> Vec<Node> {
                 let nodes_before_adding_kids = nodes.len();
                 for _ in 1..=kid_count {
                     let kid_index = nodes.len();
-                    nodes.push(Node::new(kid_index, index, 0));
+                    nodes.push(Node::new(kid_index, 0));
+                    // Add new kid to list of parent's children.
+                    nodes[index].children.push(kid_index);
                 }
                 // Add expectations about kid nods. Again, reversed order.
                 for kid_index in (nodes_before_adding_kids..nodes.len()).rev() {
