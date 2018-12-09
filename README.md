@@ -13,6 +13,8 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## 8th of December, puzzle #8
+* **"Recursion is bad"** I thought, then spent some time juggling indices of
+  a vector emulating a tree. 🤷
 * Number of times I've written `nods` instead of `nods`: `ETOOMANY`. *nods*
 * Syntax for a `for` loop going in reverse is slightly silly. `(a..b).rev()`,
   really? :D Worse, I don't think I've seen a warning that `(i..j)` with `i>j`
