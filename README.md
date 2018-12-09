@@ -12,6 +12,15 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 9th of December, puzzle #9
+* Nothing like spending half an hour debugging your solution, only to discover
+  that you left a function unimplemented, always returning `0`. :D
+* Also, wording in that puzzle was fuzzy, to say the least. Part 2 had *"if
+  the number of the last marble were 100 times larger"*. Last marble? Or last
+  marbles? Confusion ensues. Maybe it was part of the difficulty. 🙀
+* But hey, I wrote another `fmt::Display` trait!
+
+
 ## 8th of December, puzzle #8
 * **"Recursion is bad"** I thought, then spent some time juggling indices of
   a vector emulating a tree. 🤷
