@@ -4,7 +4,7 @@ use std::fmt;
 const PUZZLE_INPUT: &str = "473 players; last marble is worth 70904 points";
 const LUCKY_NUMBER: usize = 23;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 // We will use this struct to keep the game state.
 struct Game {
     player_count: usize,
@@ -89,25 +89,30 @@ fn parse_input(input: &str) -> Game {
 }
 
 fn part1(game: &mut Game) -> usize {
-    for _ in 1..=game.game_length {
+    let mut progress = 0;
+    let tenth = game.game_length / 10;
+    for i in 1..=game.game_length {
+        let new_progress = i / tenth;
+        if new_progress != progress {
+            progress = new_progress;
+            eprint!("...{}0%", progress);
+        }
         game.place_next_ball();
     }
+    eprintln!();
     *game.scores.iter().max().unwrap()
 }
 
-// fn part2(foo: &i32) -> i32 {
-//     *foo
-// }
-
 fn main() {
     let mut game = parse_input(&PUZZLE_INPUT);
-    let answer1 = part1(&mut game);
+    let answer1 = part1(&mut game.clone());
     assert_eq!(answer1, 371284);
     println!("Winning Elf's high score: {}", answer1);
 
-    // let answer2 = part2(&foo);
+    game.game_length *= 100;
+    let answer2 = part1(&mut game);
     // assert_eq!(answer2, 3671);
-    // println!("Part 2: {}", answer2);
+    println!("What if?: {}", answer2);
 }
 
 #[cfg(test)]
@@ -153,10 +158,4 @@ mod tests {
             37305,
         );
     }
-
-    // #[test]
-    // fn test_part2() {
-    //     let lyrics = parse_input(INPUT);
-    //     assert_eq!(part2(&lyrics), 94);
-    // }
 }
