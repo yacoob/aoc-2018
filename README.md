@@ -17,6 +17,12 @@ solutions to be more idiomatic. Or faster. Or both.
 * Syntax for a `for` loop going in reverse is slightly silly. `(a..b).rev()`,
   really? :D Worse, I don't think I've seen a warning that `(i..j)` with `i>j`
   is going to give you an empty range.
+* Default iterator is `into_iter`; I thought it's `iter`. It's still bit
+  confusing, need to read
+  [up](https://blog.codeship.com/understanding-rust-loops/)
+  on
+  [that](https://doc.rust-lang.org/std/iter/index.html).
+* Way too many off-by-one errors in part B. I'm probably tired today.
 
 
 ## 7th of December, puzzle #7
