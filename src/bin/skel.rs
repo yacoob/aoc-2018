@@ -47,6 +47,6 @@ to kill me twice?
     // #[test]
     // fn test_part2() {
     //     let lyrics = parse_input(INPUT);
-    //     assert_eq!(part1(&lyrics), 94);
+    //     assert_eq!(part2(&lyrics), 94);
     // }
 }
