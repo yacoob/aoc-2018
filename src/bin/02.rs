@@ -1,7 +1,7 @@
 use aoc::*;
 
-fn parse_input(input: &str) -> i32 {
-    input.len() as i32
+fn parse_input(input: &str) -> Vec<&str> {
+    input.lines().collect()
 }
 
 fn part1(foo: &i32) -> i32 {
@@ -13,10 +13,11 @@ fn part1(foo: &i32) -> i32 {
 // }
 
 fn main() {
-    let _param = 42;
-    let foo = parse_input(&read_file("inputs/01"));
+    let filename = "inputs/02";
+    let input = read_file(filename);
+    let foo = parse_input(&input);
 
-    let answer1 = part1(&foo);
+    let checksum = part1(parse_input(&read_file("inputs/02"));
     // assert_eq!(answer1, 3671);
     println!("Part 1: {}", answer1);
 

@@ -27,8 +27,7 @@ fn part2(input: &str) -> i32 {
 }
 
 fn main() {
-    let filename = "inputs/01";
-    let input = read_file(filename);
+    let input = read_file("inputs/01");
 
     let final_frequency = part1(&input);
     assert_eq!(final_frequency, 590);

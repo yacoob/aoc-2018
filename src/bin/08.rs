@@ -141,9 +141,7 @@ fn part2(nodes: &[Node]) -> usize {
 }
 
 fn main() {
-    let filename = "inputs/08";
-    let input = read_file(filename);
-    let nodes = parse_input(&input);
+    let nodes = parse_input(&read_file("inputs/08"));
 
     let answer1 = part1(&nodes);
     assert_eq!(answer1, 40746);

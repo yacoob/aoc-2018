@@ -195,11 +195,9 @@ fn part2(steps: &[Step], total_workers: i32, fixed_cost: i32) -> i32 {
 }
 
 fn main() {
-    let filename = "inputs/07";
     let number_of_workers = 5;
     let static_work_cost = 60;
-    let input = read_file(filename);
-    let steps = parse_input(&input);
+    let steps = parse_input(&read_file("inputs/07"));
 
     let step_sequence = part1(&steps);
     assert_eq!(step_sequence, "GRTAHKLQVYWXMUBCZPIJFEDNSO");
