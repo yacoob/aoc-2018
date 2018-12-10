@@ -13,6 +13,9 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## 10th of December, puzzle #10
+* **Puzzle:** Star-writing: collapsing starfield versus image recognition.
+* **Solution:** Iterative + modest application of human eye 8)
+
 * The puzzle itself was really simple. Used `image` crate instead of producing
   an ascii art. Added some appropriate quotes to the functions comments.
 * `clippy` suggested nice work around for a immutable/mutable borrow conflict
@@ -28,6 +31,9 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## 9th of December, puzzle #9
+* **Puzzle:** Elves playing horribly worded fully deterministic solitare game.
+* **Solution:** Iterative; `Vec` based too slow, `VecDeque` acceptable.
+
 * Nothing like spending half an hour debugging your solution, only to discover
   that you left a function unimplemented, always returning `0`. :D
 * Also, wording in that puzzle was fuzzy, to say the least. Part 2 had *"if
@@ -42,6 +48,9 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## 8th of December, puzzle #8
+* **Puzzle:** Licence Check: integer stream to tree parsing and mangling.
+* **Solution:** Stack-based parser plus some tree traversal. No recursion!
+
 * **"Recursion is bad"** I thought, then spent some time juggling indices of
   a vector emulating a tree. 🤷
 * Number of times I've written `nods` instead of `nods`: `ETOOMANY`. *nods*
@@ -57,6 +66,11 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## 7th of December, puzzle #7
+* **Puzzle:** Building a sleigh: instructions dependency hell.
+* **Solution:** Lexicographic topological sort. The algorithm I ended up with
+  looks like
+  [Kahn's](https://www.geeksforgeeks.org/topological-sorting-indegree-based-solution/).
+
 * This code turned out to be beefier than I expected. This is usually a sign
   that same thing could have been done in a more concise way :D
 * Finally used `clippy`; it only checks things that are being compiled, which
@@ -91,6 +105,10 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## 6th of December, puzzle #6
+* **Puzzle:** Teleportation destination selection a'la Voronoi partition.
+* **Solution:** Brute-force; it was fast enough and existing algorithms were
+  rather complex.
+
 * I've found a reviewer for the style of my Rust code. Thanks, @Lucretiel!
 * I'll most likely take a day off the schedule; I need to get some other
   entertainment, and read up more of the Rust book.
@@ -104,6 +122,9 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## 5th of December, puzzle #5
+* **Puzzle:** Polymer assembly: string processing and recution.
+* **Solution:** L-R scan with a stack.
+
 * It's kind of a good thing, that Rust's `regex` doesn't support backreferences.
   I'd *so* very much trade one problem for two. :D
 * Why can't Rust debug print a slice of a
@@ -147,10 +168,12 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## 4th of December, puzzle #4
+* **Puzzle:** Sleepy guards: schedule comparison and statistics.
+* **Solution:** Hash of hashes and some needling.
+
 As expected, starting at midnight is counterproductive. I really need to figure
 out something else. Probably slow down.
 
-### Preliminary notes
 * Had to switch to Rust 2018, to avail of
   [non-lexical lifetimes](https://rust-lang-nursery.github.io/edition-guide/rust-2018/ownership-and-lifetimes/non-lexical-lifetimes.html).
   I mean, I could have worked around it with an extra pair of braces, to create
@@ -161,6 +184,9 @@ out something else. Probably slow down.
 
 
 ## 3th of December, puzzle #3
+* **Puzzle:** Fabric cutting: rectangles overlap and such.
+* **Solution:** Iterative map painting, straight-forward.
+
 * Started late, had a break just before end of part A. Not sure how sustainable
   it'll be to do those puzzles in the evenings; I have a late thing tomorrow.
 * Yeah, I've read about structs today. Does it show? 8)
@@ -189,6 +215,10 @@ out something else. Probably slow down.
 
 
 ## 2nd of December, puzzle #2
+* **Puzzle:** Searching for correct boxes: strings diffing.
+* **Solution:** Brute-force, with a sliver of optimisation. Still getting my
+  Rust legs on.
+
 
 * `&` usage from yesterday bit explained: complex types that require
   deallocation at the end of their lifecycle aren't copied during assignments
@@ -215,6 +245,9 @@ out something else. Probably slow down.
 
 
 ## 1st of December, puzzle #1
+
+* **Puzzle:** Teleporter calibration: running sums of long list of integer.
+* **Solution:** See the puzzle description. :D
 
 In retrospect, tackling this with reading only 5 chapters of ["Rust by
 example"](https://doc.rust-lang.org/rust-by-example) might have been bit
