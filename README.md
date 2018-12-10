@@ -12,6 +12,16 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 10th of December, puzzle #10
+* The puzzle itself was really simple. Used `image` crate instead of producing
+  an ascii art. Added some appropriate quotes to the functions comments.
+* `clippy` suggested nice work around for a immutable/mutable borrow conflict
+  during image making. I was first borrowing `old_stars` to calculate
+  `x_margin`, and then modifying `old_stars.x[i]`. Initially I've `.clone()`d the
+  values out, but clippy noted that the whole thing has `Copy` trait, so I can
+  just dereference the `old_stars`. Much cleaner code.
+
+
 ## 9th of December, puzzle #9
 * Nothing like spending half an hour debugging your solution, only to discover
   that you left a function unimplemented, always returning `0`. :D
