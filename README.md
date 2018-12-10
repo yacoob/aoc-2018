@@ -19,6 +19,11 @@ solutions to be more idiomatic. Or faster. Or both.
   the number of the last marble were 100 times larger"*. Last marble? Or last
   marbles? Confusion ensues. Maybe it was part of the difficulty. 🙀
 * But hey, I wrote another `fmt::Display` trait!
+* Optimisation brought `VecDeque`, and <2.5s running time, instead of +1h. And
+  a `--release` binary finishes part B in <100ms. This puzzle is the first
+  puzzle where I had to worry about running time.
+* Not **that much** new things today; need to read more of The Book to keep my
+  appetite.
 
 
 ## 8th of December, puzzle #8

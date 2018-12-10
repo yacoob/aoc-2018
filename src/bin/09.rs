@@ -1,5 +1,5 @@
-use ansi_term::Colour::Red;
-use std::fmt;
+use std::collections::VecDeque;
+use std::time::Instant;
 
 const PUZZLE_INPUT: &str = "473 players; last marble is worth 70904 points";
 const LUCKY_NUMBER: usize = 23;
@@ -10,8 +10,11 @@ struct Game {
     player_count: usize,
     game_length: usize,
     turn: usize,
-    current: usize,
-    circle: Vec<usize>,
+    // First implementation used a Vec for circle storage, but also used insert(i)/remove(i), which
+    // are O(n-i). VecDeque's push()/pop() are O(1). Let's assert that the
+    // current ball is circle[0], and use push/pop for "rotating" VecDeque to reflect current ball
+    // changes.
+    circle: VecDeque<usize>,
     scores: Vec<usize>,
 }
 
@@ -21,12 +24,27 @@ impl Game {
             player_count,
             game_length,
             turn: 0,
-            current: 0,
-            circle: Vec::with_capacity(game_length),
+            circle: VecDeque::with_capacity(game_length),
             scores: vec![0; player_count],
         };
-        g.circle.push(0);
+        g.circle.push_front(0);
         g
+    }
+
+    // Move elements from front to back of circle.
+    fn rotate_cw(&mut self, steps: usize) {
+        for _ in 1..=steps {
+            let tmp = self.circle.pop_front().unwrap();
+            self.circle.push_back(tmp);
+        }
+    }
+
+    // Move elements from back to front of the circle.
+    fn rotate_ccw(&mut self, steps: usize) {
+        for _ in 1..=steps {
+            let tmp = self.circle.pop_back().unwrap();
+            self.circle.push_front(tmp);
+        }
     }
 
     fn place_next_ball(&mut self) {
@@ -36,47 +54,27 @@ impl Game {
         let new_ball = self.turn;
         if new_ball % LUCKY_NUMBER == 0 {
             // Ball being placed is a multiple of LUCKY_NUMBER!
+            // Move current 7 positions counterclockwise, remove it.
+            self.rotate_ccw(7);
+            let removed_ball = self.circle.pop_front().unwrap();
             let lucky_player = (self.turn - 1) % self.player_count;
-            self.scores[lucky_player] += new_ball;
-            let mut ball_to_remove: i32 = self.current as i32 - 7;
-            if ball_to_remove < 0 {
-                ball_to_remove += self.circle.len() as i32;
-            }
-            assert!(ball_to_remove > 0);
-            let ball_to_remove = ball_to_remove as usize;
-            self.scores[lucky_player] += self.circle[ball_to_remove];
-            self.circle.remove(ball_to_remove);
-            self.current = ball_to_remove;
+            self.scores[lucky_player] += new_ball + removed_ball;
         } else {
-            // Normal ball: go 1 position right, insert after that.
-            let left_neighbour = (self.current + 1) % self.circle.len();
-            if left_neighbour == self.circle.len() - 1 {
-                self.circle.push(new_ball);
-                self.current = self.circle.len() - 1;
-            } else {
-                self.circle.insert(left_neighbour + 1, new_ball);
-                self.current = left_neighbour + 1;
-            }
+            // Normal ball: move current 2 positions clockwise, insert new ball at the front.
+            self.rotate_cw(2);
+            self.circle.push_front(new_ball);
         }
     }
-}
 
-impl fmt::Display for Game {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut result = Ok(());
-        result = result.or(write!(f, "[{:>2?}]   ", self.turn % self.player_count));
-        for (position, marble) in self.circle.iter().enumerate() {
-            result = result.or(write!(
-                f,
-                "{}  ",
-                if position == self.current {
-                    Red.paint(marble.to_string()).to_string()
-                } else {
-                    marble.to_string()
-                }
-            ));
+    // https://youtu.be/6_5O-nUiZ_0 :3
+    fn play_the(&mut self) -> usize {
+        let now = Instant::now();
+        for _ in 1..=self.game_length {
+            self.place_next_ball();
         }
-        result
+        let d = now.elapsed();
+        eprintln!("Done in {}.{:06} seconds", d.as_secs(), d.subsec_micros());
+        *self.scores.iter().max().unwrap()
     }
 }
 
@@ -88,31 +86,19 @@ fn parse_input(input: &str) -> Game {
     )
 }
 
-fn part1(game: &mut Game) -> usize {
-    let mut progress = 0;
-    let tenth = game.game_length / 10;
-    for i in 1..=game.game_length {
-        let new_progress = i / tenth;
-        if new_progress != progress {
-            progress = new_progress;
-            eprint!("...{}0%", progress);
-        }
-        game.place_next_ball();
-    }
-    eprintln!();
-    *game.scores.iter().max().unwrap()
-}
-
 fn main() {
     let mut game = parse_input(&PUZZLE_INPUT);
-    let answer1 = part1(&mut game.clone());
-    assert_eq!(answer1, 371284);
-    println!("Winning Elf's high score: {}", answer1);
+    let highscore = game.clone().play_the();
+    assert_eq!(highscore, 371_284);
+    println!("Winning Elf's high score: {}", highscore);
 
     game.game_length *= 100;
-    let answer2 = part1(&mut game);
-    // assert_eq!(answer2, 3671);
-    println!("What if?: {}", answer2);
+    let highscore = game.play_the();
+    assert_eq!(highscore, 3_038_972_494);
+    println!(
+        "Winning Elf's high score when we're playing for much longer: {}",
+        highscore
+    );
 }
 
 #[cfg(test)]
@@ -122,39 +108,27 @@ mod tests {
     #[test]
     fn test_part1() {
         assert_eq!(
-            part1(&mut parse_input(
-                "9 players; last marble is worth 25 points"
-            )),
+            parse_input("9 players; last marble is worth 25 points").play_the(),
             32,
         );
         assert_eq!(
-            part1(&mut parse_input(
-                "10 players; last marble is worth 1618 points"
-            )),
+            parse_input("10 players; last marble is worth 1618 points").play_the(),
             8317,
         );
         assert_eq!(
-            part1(&mut parse_input(
-                "13 players; last marble is worth 7999 points"
-            )),
+            parse_input("13 players; last marble is worth 7999 points").play_the(),
             146373,
         );
         assert_eq!(
-            part1(&mut parse_input(
-                "17 players; last marble is worth 1104 points"
-            )),
+            parse_input("17 players; last marble is worth 1104 points").play_the(),
             2764,
         );
         assert_eq!(
-            part1(&mut parse_input(
-                "21 players; last marble is worth 6111 points"
-            )),
+            parse_input("21 players; last marble is worth 6111 points").play_the(),
             54718,
         );
         assert_eq!(
-            part1(&mut parse_input(
-                "30 players; last marble is worth 5807 points"
-            )),
+            parse_input("30 players; last marble is worth 5807 points").play_the(),
             37305,
         );
     }
