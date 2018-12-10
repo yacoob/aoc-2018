@@ -20,6 +20,11 @@ solutions to be more idiomatic. Or faster. Or both.
   `x_margin`, and then modifying `old_stars.x[i]`. Initially I've `.clone()`d the
   values out, but clippy noted that the whole thing has `Copy` trait, so I can
   just dereference the `old_stars`. Much cleaner code.
+* Went on with the smushing of A and B parts for day 2; I got into some
+  lifetimes scuttle, read about
+  [lifetimes](https://doc.rust-lang.org/nightly/book/ch10-03-lifetime-syntax.html),
+  fallen asleep while reading. Finished the code afterwards, but it's probably
+  not as good as it could be.
 
 
 ## 9th of December, puzzle #9
