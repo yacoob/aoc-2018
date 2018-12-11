@@ -12,6 +12,15 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 11th of December, puzzle #11
+* Tapioca brain day. First I've found a semi-sensible `O(n^3)` algorithm, then
+  reddit suggested a
+  [summed-area table](https://en.wikipedia.org/wiki/Summed-area_table). Great
+  idea, but I've spent my evening hunting for off by one errors. Not a good day.
+* Both parts finish <150ms; before using summed-area table I've been tempted to
+  try `rayon` with this one. Maybe in another puzzle.
+
+
 ## 10th of December, puzzle #10
 * **Puzzle:** Star-writing: collapsing starfield versus image recognition.
 * **Solution:** Iterative + modest application of human eye 8)
