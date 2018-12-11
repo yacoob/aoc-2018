@@ -5,5 +5,5 @@ authors = ["Jakub Turski <yacoob@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-regex = "1"
 image = "*"
+regex = "1"
