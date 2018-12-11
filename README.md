@@ -13,6 +13,9 @@ solutions to be more idiomatic. Or faster. Or both.
 
 
 ## 11th of December, puzzle #11
+* **Puzzle:** Min-maxing fixed area across a surface.
+* **Solution**: Iterative + summed-area table.
+
 * Tapioca brain day. First I've found a semi-sensible `O(n^3)` algorithm, then
   reddit suggested a
   [summed-area table](https://en.wikipedia.org/wiki/Summed-area_table). Great
