@@ -6,5 +6,6 @@ pub fn read_file(path: &str) -> String {
     // Read the input.
     let mut f = File::open(path).unwrap();
     f.read_to_string(&mut input).unwrap();
-    input.trim().to_string()
+    input.truncate(input.trim().len());
+    input
 }
