@@ -57,6 +57,7 @@ fn part2(power_grid: &PowerGrid) -> (usize, usize, usize) {
     // Calculate summed-area table.
     // https://en.wikipedia.org/wiki/Summed-area_table
     let mut summed_table = vec![vec![0; GRID_SIZE]; GRID_SIZE];
+    // FIXME: I bet there's a better way of sweeping a 2d vector.
     for i in 0..GRID_SIZE {
         for j in 0..GRID_SIZE {
             let mut tmp = power_grid.cells[i][j];
