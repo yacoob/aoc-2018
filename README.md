@@ -16,13 +16,16 @@ solutions to be more idiomatic. Or faster. Or both.
 * **Puzzle:** 1D life.
 * **Solution:** Iterative with some optimisation based on observations.
 
-* Very tired today. Considering taking some time off AoC.
+* Very tired today. Considering taking some time off from AoC.
 * It's not a solid general solution; I've observed that the pattern is sprinting
   right, plus the growth patterns are not malicious (eg. `..... => #`) and as
   a result we'll have some sort of creeper going right the axis.
-* Played with an idea of dynamic padding, gave it up.
+* Played with an idea of dynamic padding both sides of the relevant pattern,
+  to deal with lateral movement, gave it up in favour of fixed padding, once
+  the pattern of movement was clear.
 * Using `None` as default value for a variable that's tracking first/last
-  position is very elegant: `min = min.or(Some(val))`.
+  position is very elegant: `min = min.or(Some(val))`. I mean, I lifted this idea
+  up from someone else's code on Reddit IIRC. 
 * Still can't quite get used to not declaring type of `HashMap` explicitly. But
   it works, and things are inferred properly.
 
