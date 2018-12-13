@@ -16,7 +16,7 @@ solutions to be more idiomatic. Or faster. Or both.
 * **Puzzle:** 1D life.
 * **Solution:** Iterative with some optimisation based on observations.
 
-* Very tired today. Considering taking some time off AoC.
+* Very tired today. Considering taking some time off from AoC.
 * It's not a solid general solution; I've observed that the pattern is sprinting
   right, plus the growth patterns are not malicious (eg. `..... => #`) and as
   a result we'll have some sort of creeper going right the axis.
