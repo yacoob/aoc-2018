@@ -12,6 +12,21 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 12th of December, puzzle #12
+* **Puzzle:** 1D life.
+* **Solution:** Iterative with some optimisation based on observations.
+
+* Very tired today. Considering taking some time off AoC.
+* It's not a solid general solution; I've observed that the pattern is sprinting
+  right, plus the growth patterns are not malicious (eg. `..... => #`) and as
+  a result we'll have some sort of creeper going right the axis.
+* Played with an idea of dynamic padding, gave it up.
+* Using `None` as default value for a variable that's tracking first/last
+  position is very elegant: `min = min.or(Some(val))`.
+* Still can't quite get used to not declaring type of `HashMap` explicitly. But
+  it works, and things are inferred properly.
+
+
 ## 11th of December, puzzle #11
 * **Puzzle:** Min-maxing fixed area across a surface.
 * **Solution**: Iterative + summed-area table.
