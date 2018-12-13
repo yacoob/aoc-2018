@@ -60,15 +60,25 @@ fn parse_input(input: &str) -> Pots {
 }
 
 fn grow(pots: &mut Pots, iterations: usize) -> usize {
+     // Sum for the current generation.
     let mut sum = 0;
+    // Storage for all patterns encountered in previous generations, stripped of leading and
+    // trailing falses.
     let mut seen_patterns = HashMap::new();
     for generation in 1..=iterations {
         sum = 0;
+        // Location of first true in current pattern.
         let mut first_true = None;
+        // Location of last true in current pattern.
         let mut last_true = None;
+        // Next generations; all pots are empty to begin with.
         let mut next_state = vec![false; MAX_POT_COUNT];
+        // Iterate with a sliding window over pots.state.
         for (i, window) in pots.state.windows(PATTERN_SIZE).enumerate() {
+            // For current sliding window, this is the position in next state where its output
+            // should land.
             let output_position = i + PATTERN_SIZE / 2;
+            // Are we blooming or withering? :)
             let bloom = pots.growth[window];
             if bloom {
                 sum += output_position - pots.offset;
@@ -109,7 +119,6 @@ fn main() {
         sum20
     );
     let sum_eternal = grow(&mut pots, 50_000_000_000);
-    // let sum_eternal = grow(&mut pots, 110);
     assert_eq!(sum_eternal, 4_000_000_000_000);
     println!(
         "Sum of numbers on pots after a really long time: {}",
