@@ -1,24 +1,40 @@
 use std::char;
 
-fn part1(input: usize) -> String {
-    let mut scores = vec![3, 7];
-    let mut favourites = vec![0, 1];
+struct Kitchen {
+    scores: Vec<usize>,
+    favourites: Vec<usize>,
+}
 
-    while scores.len() < input + 10 {
-        let favourite1 = scores[favourites[0]];
-        let favourite2 = scores[favourites[1]];
+impl Kitchen {
+    fn new() -> Kitchen {
+        Kitchen {
+            scores: vec![3, 7],
+            favourites: vec![0, 1],
+        }
+    }
+
+    fn brainstorm(&mut self) {
+        let favourite1 = self.scores[self.favourites[0]];
+        let favourite2 = self.scores[self.favourites[1]];
         let mix = favourite1 + favourite2;
         assert!(mix < 19);
         if mix / 10 > 0 {
-            scores.push(mix / 10);
+            self.scores.push(mix / 10);
         }
-        scores.push(mix % 10);
-        favourites[0] = (favourites[0] + favourite1 + 1) % scores.len();
-        favourites[1] = (favourites[1] + favourite2 + 1) % scores.len();
+        self.scores.push(mix % 10);
+        self.favourites[0] = (self.favourites[0] + favourite1 + 1) % self.scores.len();
+        self.favourites[1] = (self.favourites[1] + favourite2 + 1) % self.scores.len();
+    }
+}
+
+fn part1(input: usize) -> String {
+    let mut kitchen = Kitchen::new();
+    while kitchen.scores.len() < input + 10 {
+        kitchen.brainstorm();
     }
     let mut answer = String::new();
     for i in input..input + 10 {
-        answer.push(char::from_digit(scores[i] as u32, 10).unwrap());
+        answer.push(char::from_digit(kitchen.scores[i] as u32, 10).unwrap());
     }
     answer
 }
