@@ -1,5 +1,5 @@
+use aoc::*;
 use std::collections::VecDeque;
-use std::time::Instant;
 
 const PUZZLE_INPUT: &str = "473 players; last marble is worth 70904 points";
 const LUCKY_NUMBER: usize = 23;
@@ -68,12 +68,11 @@ impl Game {
 
     // https://youtu.be/6_5O-nUiZ_0 :3
     fn play_the(&mut self) -> usize {
-        let now = Instant::now();
+        let stopwatch = Stopwatch::start();
         for _ in 1..=self.game_length {
             self.place_next_ball();
         }
-        let d = now.elapsed();
-        eprintln!("Done in {}.{:06} seconds", d.as_secs(), d.subsec_micros());
+        stopwatch.split();
         *self.scores.iter().max().unwrap()
     }
 }
