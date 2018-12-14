@@ -12,6 +12,14 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 14th of December, puzzle #14
+* **Puzzle:** linear search for a pattern in a growing list of numbers.
+* **Solution:** Iterative, bit slow due to reslicing of ever-growing vector.
+
+* I'm under impression that this should be faster; `kitchen.scores` is growing,
+  but I'm always chopping off same amount of elements, and single element access
+  is `O(1)` for a vector.
+
 ## 13th of December, puzzle #13
 * **Puzzle:** you're in maze of cart tracks, all alike.
 * **Solution:** Iterative; lot of ascii gazing.
