@@ -32,11 +32,10 @@ fn part1(input: usize) -> String {
     while kitchen.scores.len() < input + 10 {
         kitchen.brainstorm();
     }
-    let mut answer = String::new();
-    for i in input..input + 10 {
-        answer.push(char::from_digit(kitchen.scores[i] as u32, 10).unwrap());
-    }
-    answer
+    kitchen.scores[input..input + 10]
+        .iter()
+        .map(|&s| char::from_digit(s as u32, 10).unwrap())
+        .collect()
 }
 
 fn main() {
