@@ -18,10 +18,12 @@ impl Kitchen {
         let favourite2 = self.scores[self.favourites[1]];
         let mix = favourite1 + favourite2;
         assert!(mix < 19);
+        // Not every mix guarantees two digits of output.
         if mix / 10 > 0 {
             self.scores.push(mix / 10);
         }
         self.scores.push(mix % 10);
+        // Establish new favourite recipes.
         self.favourites[0] = (self.favourites[0] + favourite1 + 1) % self.scores.len();
         self.favourites[1] = (self.favourites[1] + favourite2 + 1) % self.scores.len();
     }
@@ -38,15 +40,38 @@ fn part1(input: usize) -> String {
         .collect()
 }
 
+fn part2(input: Vec<usize>) -> usize {
+    let mut kitchen = Kitchen::new();
+    let tail_size = input.len();
+    loop {
+        kitchen.brainstorm();
+        let score_count = kitchen.scores.len();
+        // FIXME: would windows be useful here?
+        // No point in checking the tail if there are not enough scores yet.
+        if tail_size < score_count {
+            // Check the actual tail.
+            if input == &kitchen.scores[score_count - tail_size..] {
+                return score_count - tail_size;
+            }
+            // Check one position before; this is necessary in case we've added 2 scores during
+            // brainstorming.
+            if input == &kitchen.scores[score_count - tail_size - 1..score_count - 1] {
+                return score_count - tail_size - 1;
+            }
+        }
+    }
+}
+
 fn main() {
     let input = 74501;
     let answer1 = part1(input);
     assert_eq!(answer1, "1464411010");
     println!("Part 1: {}", answer1);
 
-    // let answer2 = part2(&foo);
-    // assert_eq!(answer2, 3671);
-    // println!("Part 2: {}", answer2);
+    let input = vec![0, 7, 4, 5, 0, 1];
+    let answer2 = part2(input);
+    assert_eq!(answer2, 20288091);
+    println!("Part 2: {}", answer2);
 }
 
 #[cfg(test)]
@@ -61,9 +86,11 @@ mod tests {
         assert_eq!(part1(2018), "5941429882");
     }
 
-    // #[test]
-    // fn test_part2() {
-    //     let lyrics = parse_input(INPUT);
-    //     assert_eq!(part2(&lyrics), 94);
-    // }
+    #[test]
+    fn test_part2() {
+        assert_eq!(part2(vec![0, 1, 2, 4, 5]), 5);
+        assert_eq!(part2(vec![5, 1, 5, 8, 9]), 9);
+        assert_eq!(part2(vec![9, 2, 5, 1, 0]), 18);
+        assert_eq!(part2(vec![5, 9, 4, 1, 4]), 2018);
+    }
 }
