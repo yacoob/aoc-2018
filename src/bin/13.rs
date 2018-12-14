@@ -66,7 +66,7 @@ impl Ord for Cart {
     fn cmp(&self, other: &Cart) -> Ordering {
         let c = self.y.cmp(&other.y);
         match c {
-            Ordering::Equal => self.x.cmp(&other.y),
+            Ordering::Equal => self.x.cmp(&other.x),
             _ => c,
         }
     }
@@ -78,13 +78,6 @@ impl PartialOrd for Cart {
     }
 }
 
-impl Mine {
-    fn remove_cart(&mut self, id: usize) {
-        let idx = self.carts.iter().position(|c| c.id == id).unwrap();
-        self.carts.remove(idx);
-    }
-}
-
 fn parse_input(input: &str) -> Mine {
     let mut mine = Mine {
         clock: 0,
@@ -92,8 +85,7 @@ fn parse_input(input: &str) -> Mine {
         carts: vec![],
     };
     let mut x;
-    let mut y = 0;
-    for line in input.lines() {
+    for (y, line) in input.lines().enumerate() {
         x = 0;
         for c in line.chars() {
             match c {
@@ -117,27 +109,38 @@ fn parse_input(input: &str) -> Mine {
             }
             x += 1;
         }
-        y += 1;
     }
     mine
 }
 
 fn joyride(mine: &mut Mine, stop_at_first_crash: bool) -> (usize, usize) {
     // Save current cart positions; we'll use it for crash detection later.
+    // We also use cart_positions to cache removal of crashed carts. We can't do that straight away
+    // while looping through carts, as borrow checker protests loudly about borrowing mine.carts
+    // mutably twice.
     let mut cart_positions: HashMap<(usize, usize), usize> =
         mine.carts.iter().map(|c| ((c.x, c.y), c.id)).collect();
     loop {
         // Tick goes the clock.
         mine.clock += 1;
+        // Remove carts that crashed in previous tick from mine.carts. They're still present there,
+        // but are already gone from cart_positions.
+        mine.carts
+            .retain(|c| cart_positions.contains_key(&(c.x, c.y)));
+        assert_eq!(cart_positions.len(), mine.carts.len());
+        // Are we down to last cart (part B)?
+        if mine.carts.len() == 1 {
+            return (mine.carts[0].x, mine.carts[0].y);
+        }
         // Ensure we're reviewing carts top to bottom, left to right.
         mine.carts.sort();
-        // Verify whether cart_positions contains all carts.
-        for cart in &mine.carts {
-            assert!(cart_positions.contains_key(&(cart.x, cart.y)));
-        }
-        assert_eq!(cart_positions.len(), mine.carts.len());
         // Move all zig. :3
         for cart in &mut mine.carts {
+            // Skip carts that got deleted earlier in this cycle, and that change isn't yet
+            // reflected in mine.carts.
+            if !cart_positions.contains_key(&(cart.x, cart.y)) {
+                continue;
+            }
             // What's the next tile for this cart?
             let (new_x, new_y) = match cart.direction {
                 Up => (cart.x, cart.y - 1),
@@ -178,21 +181,21 @@ fn joyride(mine: &mut Mine, stop_at_first_crash: bool) -> (usize, usize) {
                 // Something else entirely instead of empty space or tracks.
                 c => panic!("Unexpected tile {} at ({},{})!", c, new_x, new_y),
             }
-            // Check for collisions.
+            // Collision check.
+            // First, remove current cart from position cache. It's either moving to a new
+            // position, or crashing into other cart.
             cart_positions.remove(&(cart.x, cart.y));
+            // Is there another cart in the new tile?
             match cart_positions.entry((new_x, new_y)) {
-                // Handle a cart crash.
+                // Yes; remove the cart we've crashed into.
                 Entry::Occupied(o) => {
+                    o.remove();
+                    // Maybe return, because we've only been waiting for a first crash (part A)?
                     if stop_at_first_crash {
                         return (new_x, new_y);
                     }
-                    // Remove cart we've crashed into.
-                    mine.remove_cart(*o.get());
-                    o.remove();
-                    // Remove current cart.
-                    mine.remove_cart(cart.id);
                 }
-                // No other cart at the target tile. Update current cart's location.
+                // No; update current cart's position, and insert it into cache.
                 Entry::Vacant(o) => {
                     cart.x = new_x;
                     cart.y = new_y;
@@ -200,16 +203,8 @@ fn joyride(mine: &mut Mine, stop_at_first_crash: bool) -> (usize, usize) {
                 }
             };
         }
-        if mine.carts.len() == 1 {
-            eprintln!("Last car standing: {:?}", mine.carts);
-            return (0, 0);
-        }
     }
 }
-
-// fn part2(foo: &i32) -> i32 {
-//     *foo
-// }
 
 fn main() {
     let mine = parse_input(&read_file("inputs/13"));
@@ -218,14 +213,13 @@ fn main() {
     println!("First collision detected at: {:?}", crash1);
 
     let last1 = joyride(&mut mine.clone(), false);
-    // assert_eq!(crash1, (83, 49));
+    assert_eq!(last1, (73, 36));
     println!("Last cart standing at: {:?}", last1);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
     const INPUT: &str = r#"/->-\
 |   |  /----\
 | /-+--+-\  |
@@ -233,12 +227,10 @@ mod tests {
 \-+-/  \-+--/
   \------/
 "#;
-
     #[test]
     fn test_joyride() {
         let mine = parse_input(INPUT);
         assert_eq!(joyride(&mut mine.clone(), true), (7, 3));
         assert_eq!(joyride(&mut mine.clone(), false), (6, 4));
     }
-
 }
