@@ -1,12 +1,11 @@
 use self::Direction::*;
 use aoc::*;
-use std::cmp::Ordering;
 use std::collections::hash_map::{Entry, HashMap};
 
 const TRACKS_SIZE: usize = 150;
 const TURNS: [Direction; 4] = [Up, Right, Down, Left];
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 enum Direction {
     Up,
     Right,
@@ -14,7 +13,7 @@ enum Direction {
     Left,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug)]
 struct Cart {
     id: usize,
     x: usize,
@@ -58,23 +57,6 @@ impl Cart {
             Some(Right) => Some(Left),
             Some(d) => panic!("Cart wants to turn {:?} and it really shouldn't!", d),
         }
-    }
-}
-
-// Comparison functions for carts; we use cart's coords to establish sorting order.
-impl Ord for Cart {
-    fn cmp(&self, other: &Cart) -> Ordering {
-        let c = self.y.cmp(&other.y);
-        match c {
-            Ordering::Equal => self.x.cmp(&other.x),
-            _ => c,
-        }
-    }
-}
-
-impl PartialOrd for Cart {
-    fn partial_cmp(&self, other: &Cart) -> Option<Ordering> {
-        Some(self.cmp(other))
     }
 }
 
@@ -133,7 +115,7 @@ fn joyride(mine: &mut Mine, stop_at_first_crash: bool) -> (usize, usize) {
             return (mine.carts[0].x, mine.carts[0].y);
         }
         // Ensure we're reviewing carts top to bottom, left to right.
-        mine.carts.sort();
+        mine.carts.sort_by_key(|c| (c.x, c.y));
         // Move all zig. :3
         for cart in &mut mine.carts {
             // Skip carts that got deleted earlier in this cycle, and that change isn't yet
