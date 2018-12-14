@@ -60,7 +60,7 @@ fn parse_input(input: &str) -> Pots {
 }
 
 fn grow(pots: &mut Pots, iterations: usize) -> usize {
-     // Sum for the current generation.
+    // Sum for the current generation.
     let mut sum = 0;
     // Storage for all patterns encountered in previous generations, stripped of leading and
     // trailing falses.

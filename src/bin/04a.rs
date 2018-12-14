@@ -11,7 +11,6 @@ fn _print_schedule(guard_id: &usize, date: &str, hour: &Vec<usize>) {
     println!("{}", ".".repeat(60 - hour.len()));
 }
 
-
 fn main() {
     let input = include_str!("../../inputs/04");
 
@@ -43,7 +42,9 @@ fn main() {
                 .unwrap();
             continue;
         }
-        let dates = &mut sleeping_patterns.entry(current_guard).or_insert(HashMap::new());
+        let dates = &mut sleeping_patterns
+            .entry(current_guard)
+            .or_insert(HashMap::new());
         let day = dates.entry(date).or_insert(Vec::new());
         if entry.ends_with("falls asleep") {
             let mut awake_period = vec![0usize; minute - day.len()];
@@ -62,7 +63,7 @@ fn main() {
     // This can be converted to a chain of functional calls for sure - but I'm tired.
     for (guard, days) in sleeping_patterns.iter() {
         for (_, hour) in days {
-            let minutes_of_sleep = hour.iter().filter(|&&x| x>0).count();
+            let minutes_of_sleep = hour.iter().filter(|&&x| x > 0).count();
             let s = total_sleep.entry(*guard).or_insert(0);
             *s += minutes_of_sleep;
         }

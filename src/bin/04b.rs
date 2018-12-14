@@ -11,7 +11,6 @@ fn _print_schedule(guard_id: &usize, date: &str, hour: &Vec<usize>) {
     println!("{}", ".".repeat(60 - hour.len()));
 }
 
-
 fn main() {
     let input = include_str!("../../inputs/04");
 
@@ -43,7 +42,9 @@ fn main() {
                 .unwrap();
             continue;
         }
-        let dates = &mut sleeping_patterns.entry(current_guard).or_insert(HashMap::new());
+        let dates = &mut sleeping_patterns
+            .entry(current_guard)
+            .or_insert(HashMap::new());
         let day = dates.entry(date).or_insert(Vec::new());
         if entry.ends_with("falls asleep") {
             let mut awake_period = vec![0usize; minute - day.len()];
@@ -61,7 +62,7 @@ fn main() {
     // guard_id -> number_of_times_slept_in_particular_minute
     let mut minutes_frequency: HashMap<usize, Vec<usize>> = HashMap::new();
     for (guard, days) in sleeping_patterns.iter() {
-        let minutes = &mut minutes_frequency.entry(*guard).or_insert(vec![0;60]);
+        let minutes = &mut minutes_frequency.entry(*guard).or_insert(vec![0; 60]);
         for (_, hour) in days {
             for i in 0..hour.len() {
                 minutes[i] += hour[i];
@@ -72,12 +73,19 @@ fn main() {
     //  (guard_id, minute, sleep_count)
     let mut chosen_one = (0, 0, 0);
     for (guard, frequency) in minutes_frequency.iter() {
-        let (best_minute, days_slept)  = frequency.iter().enumerate().max_by_key(|(_, &count)| count).unwrap();
+        let (best_minute, days_slept) = frequency
+            .iter()
+            .enumerate()
+            .max_by_key(|(_, &count)| count)
+            .unwrap();
         if *days_slept > chosen_one.2 {
             chosen_one.0 = *guard;
             chosen_one.1 = best_minute;
             chosen_one.2 = *days_slept;
         }
     }
-    println!("Guard #{} slept on minute 00:{} during {} shifts!", chosen_one.0, chosen_one.1, chosen_one.2);
+    println!(
+        "Guard #{} slept on minute 00:{} during {} shifts!",
+        chosen_one.0, chosen_one.1, chosen_one.2
+    );
 }
