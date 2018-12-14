@@ -16,10 +16,24 @@ solutions to be more idiomatic. Or faster. Or both.
 * **Puzzle:** you're in maze of cart tracks, all alike.
 * **Solution:** Iterative; lot of ascii gazing.
 
+* Next week might be challenging, as I'm oncall. :/
 * Not that much of a puzzle; it just requires tedious checking at both parsing
   and movement stages.
 * Tracking twisted turns? Not a problem! Forget about the fact that I'm
   stripping whitespace from the input? Haha, fuck you 8)
+* Solving those puzzles at 2AM is suboptimal; I've spent good 40 minutes not
+  noticing that I had a coordinate mismatch (`x` vs `y`) in my `Ord`
+  implementation for `Cart`. This was causing *last* crash to happen too early.
+  In the end I got rid of all of it, in favour of `sort_by_key`.
+* This puzzle was my first serious run-in with borrow checker; I had to
+  introduce `cart_positions` to deal with the fact that I was iterating mutably
+  through `mine.carts` (moving each cart) while trying to modify it (removing
+  crashed carts).
+* Plenty of assertions. I didn't bother with visualisation, as tracks span large
+  area, so I coded very defensively.
+* Last but not least; I haven't noticed that there are separate examples for
+  parts A and B, and ran part B on A's input. Two carts, so looping forever
+  afterwards. Go, me!
 
 
 ## 12th of December, puzzle #12

@@ -40,8 +40,9 @@ impl Cart {
         }
     }
 
+    // Rotate the cart.
     fn turn(&mut self) {
-        // Rotate the cart.
+        // What's the new direction of this cart?
         let direction_change = match &self.next_turn {
             None => 0,
             Some(Left) => 3,
@@ -50,7 +51,7 @@ impl Cart {
         };
         let idx = TURNS.iter().position(|x| x == &self.direction).unwrap();
         self.direction = TURNS[(idx + direction_change) % TURNS.len()];
-
+        // What's the direction this cart is going to turn towards on next crossing?
         self.next_turn = match self.next_turn {
             Some(Left) => None,
             None => Some(Right),
@@ -95,7 +96,16 @@ fn parse_input(input: &str) -> Mine {
     mine
 }
 
+// joyride will take a mine setup, and start moving the carts according to puzzle rules. It'll stop
+// upone one of the two things happening:
+// - first cart crash occurs, returning coords of the crash
+// - all but one carts crash, returning coords of the last standing cart
 fn joyride(mine: &mut Mine, stop_at_first_crash: bool) -> (usize, usize) {
+    // If we're solving for last cart standing, there need to be an odd number of carts in the
+    // input.
+    if !stop_at_first_crash {
+        assert_eq!(mine.carts.len() % 2, 1);
+    }
     // Save current cart positions; we'll use it for crash detection later.
     // We also use cart_positions to cache removal of crashed carts. We can't do that straight away
     // while looping through carts, as borrow checker protests loudly about borrowing mine.carts
@@ -103,7 +113,6 @@ fn joyride(mine: &mut Mine, stop_at_first_crash: bool) -> (usize, usize) {
     let mut cart_positions: HashMap<(usize, usize), usize> =
         mine.carts.iter().map(|c| ((c.x, c.y), c.id)).collect();
     loop {
-        // Tick goes the clock.
         mine.clock += 1;
         // Remove carts that crashed in previous tick from mine.carts. They're still present there,
         // but are already gone from cart_positions.
@@ -202,17 +211,24 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    const INPUT: &str = r#"/->-\
+    const INPUT_FIRST: &str = r#"/->-\
 |   |  /----\
 | /-+--+-\  |
 | | |  | v  |
 \-+-/  \-+--/
   \------/
 "#;
+    const INPUT_SECOND: &str = r#"/>-<\
+|   |
+| /<+-\
+| | | v
+\>+</ |
+  |   ^
+  \<->/"#;
+
     #[test]
     fn test_joyride() {
-        let mine = parse_input(INPUT);
-        assert_eq!(joyride(&mut mine.clone(), true), (7, 3));
-        assert_eq!(joyride(&mut mine.clone(), false), (6, 4));
+        assert_eq!(joyride(&mut parse_input(INPUT_FIRST), true), (7, 3));
+        assert_eq!(joyride(&mut parse_input(INPUT_SECOND), false), (6, 4));
     }
 }
