@@ -1,7 +1,7 @@
 use self::Direction::*;
 use aoc::*;
 use std::cmp::Ordering;
-use std::collections::HashSet;
+use std::collections::hash_map::{Entry, HashMap};
 
 const TRACKS_SIZE: usize = 150;
 const TURNS: [Direction; 4] = [Up, Right, Down, Left];
@@ -23,7 +23,7 @@ struct Cart {
     next_turn: Option<Direction>,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 struct Mine {
     clock: i32,
     tracks: Vec<Vec<char>>,
@@ -115,16 +115,21 @@ fn parse_input(input: &str) -> Mine {
     mine
 }
 
-fn part1(mine: &mut Mine) -> (usize, usize) {
+fn joyride(mine: &mut Mine, stop_at_first_crash: bool) -> (usize, usize) {
+    // Save current cart positions; we'll use it for crash detection later.
+    let mut cart_positions: HashMap<(usize, usize), usize> =
+        mine.carts.iter().map(|c| ((c.x, c.y), c.id)).collect();
     loop {
         // Tick goes the clock.
         mine.clock += 1;
-        // Move all zig. :3
         // Ensure we're reviewing carts top to bottom, left to right.
         mine.carts.sort();
-        // Save current cart positions; we'll use it for crash detection later.
-        let mut cart_positions: HashSet<(usize, usize)> =
-            mine.carts.iter().map(|c| (c.x, c.y)).collect();
+        // Verify whether cart_positions contains all carts.
+        for cart in &mine.carts {
+            assert!(cart_positions.contains_key(&(cart.x, cart.y)));
+        }
+        assert_eq!(cart_positions.len(), mine.carts.len());
+        // Move all zig. :3
         for cart in &mut mine.carts {
             // What's the next tile for this cart?
             let (new_x, new_y) = match cart.direction {
@@ -166,15 +171,22 @@ fn part1(mine: &mut Mine) -> (usize, usize) {
                 // Something else entirely instead of empty space or tracks.
                 c => panic!("Unexpected tile {} at ({},{})!", c, new_x, new_y),
             }
-            // Check for collisions
-            if cart_positions.contains(&(new_x, new_y)) {
-                return (new_x, new_y);
-            }
-            // Actually move the cart.
+            // Check for collisions.
             cart_positions.remove(&(cart.x, cart.y));
-            cart.x = new_x;
-            cart.y = new_y;
-            cart_positions.insert((cart.x, cart.y));
+            match cart_positions.entry((new_x, new_y)) {
+                // Handle a cart crash.
+                Entry::Occupied(o) => {
+                    if stop_at_first_crash {
+                        return (new_x, new_y);
+                    }
+                }
+                // No other cart at the target tile. Update current cart's location.
+                Entry::Vacant(o) => {
+                    cart.x = new_x;
+                    cart.y = new_y;
+                    o.insert(cart.id);
+                }
+            };
         }
     }
 }
@@ -184,15 +196,14 @@ fn part1(mine: &mut Mine) -> (usize, usize) {
 // }
 
 fn main() {
-    let mut mine = parse_input(&read_file("inputs/13"));
-    // let mut mine = parse_input(INPUT);
-    let answer1 = part1(&mut mine);
-    // assert_eq!(answer1, 3671);
-    println!("First collision detected at: {:?}", answer1);
+    let mine = parse_input(&read_file("inputs/13"));
+    let crash1 = joyride(&mut mine.clone(), true);
+    assert_eq!(crash1, (83, 49));
+    println!("First collision detected at: {:?}", crash1);
 
-    // let answer2 = part2(&foo);
-    // assert_eq!(answer2, 3671);
-    // println!("Part 2: {}", answer2);
+    // let last1 = joyride(&mut mine.clone(), false);
+    // assert_eq!(crash1, (83, 49));
+    // println!("Last cart standing at: {:?}", last1);
 }
 
 #[cfg(test)]
@@ -208,14 +219,10 @@ mod tests {
 "#;
 
     #[test]
-    fn test_part1() {
-        let mut mine = parse_input(INPUT);
-        assert_eq!(part1(&mut mine), (7, 3));
+    fn test_joyride() {
+        let mine = parse_input(INPUT);
+        assert_eq!(joyride(&mut mine.clone(), true), (7, 3));
+        assert_eq!(joyride(&mut mine.clone(), false), (6, 4));
     }
 
-    // #[test]
-    // fn test_part2() {
-    //     let lyrics = parse_input(INPUT);
-    //     assert_eq!(part2(&lyrics), 94);
-    // }
 }
