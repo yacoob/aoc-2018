@@ -78,6 +78,13 @@ impl PartialOrd for Cart {
     }
 }
 
+impl Mine {
+    fn remove_cart(&mut self, id: usize) {
+        let idx = self.carts.iter().position(|c| c.id == id).unwrap();
+        self.carts.remove(idx);
+    }
+}
+
 fn parse_input(input: &str) -> Mine {
     let mut mine = Mine {
         clock: 0,
@@ -179,6 +186,11 @@ fn joyride(mine: &mut Mine, stop_at_first_crash: bool) -> (usize, usize) {
                     if stop_at_first_crash {
                         return (new_x, new_y);
                     }
+                    // Remove cart we've crashed into.
+                    mine.remove_cart(*o.get());
+                    o.remove();
+                    // Remove current cart.
+                    mine.remove_cart(cart.id);
                 }
                 // No other cart at the target tile. Update current cart's location.
                 Entry::Vacant(o) => {
@@ -187,6 +199,10 @@ fn joyride(mine: &mut Mine, stop_at_first_crash: bool) -> (usize, usize) {
                     o.insert(cart.id);
                 }
             };
+        }
+        if mine.carts.len() == 1 {
+            eprintln!("Last car standing: {:?}", mine.carts);
+            return (0, 0);
         }
     }
 }
@@ -201,9 +217,9 @@ fn main() {
     assert_eq!(crash1, (83, 49));
     println!("First collision detected at: {:?}", crash1);
 
-    // let last1 = joyride(&mut mine.clone(), false);
+    let last1 = joyride(&mut mine.clone(), false);
     // assert_eq!(crash1, (83, 49));
-    // println!("Last cart standing at: {:?}", last1);
+    println!("Last cart standing at: {:?}", last1);
 }
 
 #[cfg(test)]
