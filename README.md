@@ -12,6 +12,16 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 13th of December, puzzle #13
+* **Puzzle:** you're in maze of cart tracks, all alike.
+* **Solution:** Iterative; lot of ascii gazing.
+
+* Not that much of a puzzle; it just requires tedious checking at both parsing
+  and movement stages.
+* Tracking twisted turns? Not a problem! Forget about the fact that I'm
+  stripping whitespace from the input? Haha, fuck you 8)
+
+
 ## 12th of December, puzzle #12
 * **Puzzle:** 1D life.
 * **Solution:** Iterative with some optimisation based on observations.
@@ -25,7 +35,7 @@ solutions to be more idiomatic. Or faster. Or both.
   the pattern of movement was clear.
 * Using `None` as default value for a variable that's tracking first/last
   position is very elegant: `min = min.or(Some(val))`. I mean, I lifted this idea
-  up from someone else's code on Reddit IIRC. 
+  up from someone else's code on Reddit IIRC.
 * Still can't quite get used to not declaring type of `HashMap` explicitly. But
   it works, and things are inferred properly.
 
