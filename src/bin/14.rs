@@ -30,7 +30,8 @@ impl Kitchen {
     }
 }
 
-fn part1(input: usize) -> String {
+fn part1(input: &str) -> String {
+    let input: usize = input.parse().unwrap();
     let mut kitchen = Kitchen::new();
     while kitchen.scores.len() < input + 10 {
         kitchen.brainstorm();
@@ -41,7 +42,12 @@ fn part1(input: usize) -> String {
         .collect()
 }
 
-fn part2(input: Vec<usize>) -> usize {
+fn part2(input: &str) -> usize {
+    let input: Vec<usize> = input
+        .as_bytes()
+        .iter()
+        .map(|b| (b - b'0') as usize)
+        .collect();
     let s = Stopwatch::start();
     let mut kitchen = Kitchen::new();
     let tail_size = input.len();
@@ -66,14 +72,13 @@ fn part2(input: Vec<usize>) -> usize {
 }
 
 fn main() {
-    let input = 74501;
+    let input = "074501";
     let answer1 = part1(input);
     assert_eq!(answer1, "1464411010");
     println!("Part 1: {}", answer1);
 
-    let input = vec![7, 4, 5, 0, 1];
     let answer2 = part2(input);
-    // assert_eq!(answer2, 20288091);
+    assert_eq!(answer2, 20288091);
     println!("Part 2: {}", answer2);
 }
 
@@ -83,17 +88,17 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        assert_eq!(part1(9), "5158916779");
-        assert_eq!(part1(5), "0124515891");
-        assert_eq!(part1(18), "9251071085");
-        assert_eq!(part1(2018), "5941429882");
+        assert_eq!(part1("9"), "5158916779");
+        assert_eq!(part1("5"), "0124515891");
+        assert_eq!(part1("18"), "9251071085");
+        assert_eq!(part1("2018"), "5941429882");
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(vec![0, 1, 2, 4, 5]), 5);
-        assert_eq!(part2(vec![5, 1, 5, 8, 9]), 9);
-        assert_eq!(part2(vec![9, 2, 5, 1, 0]), 18);
-        assert_eq!(part2(vec![5, 9, 4, 1, 4]), 2018);
+        assert_eq!(part2("01245"), 5);
+        assert_eq!(part2("51589"), 9);
+        assert_eq!(part2("92510"), 18);
+        assert_eq!(part2("59414"), 2018);
     }
 }
