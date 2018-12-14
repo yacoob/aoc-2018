@@ -33,7 +33,6 @@ impl Step {
 impl SantaLittleHelper {
     fn new(i: i32) -> SantaLittleHelper {
         // Born ready.
-        println!("I'm not a number (#{}) - I'm a free man (or elf)!", i);
         SantaLittleHelper {
             id: i,
             last_worked_on: '_',
@@ -122,16 +121,8 @@ fn part2(steps: &[Step], total_workers: i32, fixed_cost: i32) -> i32 {
     let mut completed_steps = String::with_capacity(steps.len());
     // Just a wall clock, we'll use it for measuring work time.
     let mut clock = 0;
-    // Print a header for the timesheet.
-    print!("clock\t");
-    for worker in &workers {
-        print!("{}\t", worker.id);
-    }
-    println!("Completed");
-    println!("{:->60}", "");
     // Get to work people!
     loop {
-        print!("{:>2}\t", clock);
         // Give every worker that is currently not working next outstanding unblocked step.
         if !steps.is_empty() {
             for worker in &mut workers {
@@ -163,7 +154,6 @@ fn part2(steps: &[Step], total_workers: i32, fixed_cost: i32) -> i32 {
             if worker.work_left > 0 {
                 at_least_one_worker_busy = true;
                 worker.work_left -= 1;
-                print!("{}\t", worker.last_worked_on);
                 // Has this worker just completed a step?
                 if worker.work_left == 0 {
                     completed_this_cycle.push(worker.last_worked_on);
@@ -172,11 +162,8 @@ fn part2(steps: &[Step], total_workers: i32, fixed_cost: i32) -> i32 {
                         step.prerequisites.remove(&worker.last_worked_on);
                     }
                 }
-            } else {
-                print!(".\t");
             }
         }
-        println!("{}", completed_steps);
 
         // Maybe we're done?
         if !at_least_one_worker_busy && steps.is_empty() {
@@ -190,7 +177,6 @@ fn part2(steps: &[Step], total_workers: i32, fixed_cost: i32) -> i32 {
         }
     }
     // We're done!
-    println!("{:->60}", "");
     clock - 1
 }
 
