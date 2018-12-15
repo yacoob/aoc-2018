@@ -1,33 +1,50 @@
 use aoc::*;
+use std::collections::hash_map::Entry;
+use std::collections::HashMap;
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 enum Faction {
     Elf,
     Goblin,
 }
 
-#[derive(Debug)]
+impl Faction {
+    fn as_char(&self) -> char {
+        match self {
+            Faction::Elf => 'E',
+            Faction::Goblin => 'G',
+        }
+    }
+
+    fn from_char(c: char) -> Faction {
+        match c {
+            'E' => Faction::Elf,
+            'G' => Faction::Goblin,
+            _ => panic!("Only Elves and Goblins are allowed in the arena!"),
+        }
+    }
+}
+
+#[derive(PartialEq)]
 struct Combatant {
-    id: usize,
-    position: (usize, usize),
     hp: isize,
     ap: usize,
     faction: Faction,
 }
 
 impl Combatant {
-    fn new(id: usize, (x, y): (usize, usize), faction: Faction) -> Combatant {
+    fn new(c: char) -> Combatant {
         Combatant {
-            id,
-            faction,
-            position: (x, y),
+            faction: Faction::from_char(c),
             hp: 200,
             ap: 3,
         }
     }
 
     fn maybe_kill(&self, other: &mut Combatant) -> bool {
+        // No friendly fire!
+        assert!(self.faction != other.faction);
         other.hp -= self.ap as isize;
         if other.hp < 0 {
             true
@@ -37,57 +54,57 @@ impl Combatant {
     }
 }
 
+impl fmt::Debug for Combatant {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "[{}: ({:3>})]", self.faction.as_char(), self.hp)
+    }
+}
+
 struct Arena {
     field: Vec<Vec<char>>,
-    elves: Vec<Combatant>,
-    goblins: Vec<Combatant>,
+    units: HashMap<(usize, usize), Combatant>,
 }
 
 impl Arena {
     fn from_str(input: &str) -> Arena {
         let mut field = vec![];
-        let mut elves = vec![];
-        let mut goblins = vec![];
+        let mut units = HashMap::new();
         for (y, line) in input.lines().enumerate() {
             field.push(vec![]);
             let current_line = &mut field[y];
             for (x, c) in line.chars().enumerate() {
                 match c {
-                    'G' => {
-                        goblins.push(Combatant::new(goblins.len(), (x, y), Faction::Goblin));
+                    c @ 'E' | c @ 'G' => {
+                        current_line.push('.');
+                        units.insert((x, y), Combatant::new(c));
                     }
-                    'E' => {
-                        elves.push(Combatant::new(elves.len(), (x, y), Faction::Elf));
-                    }
-                    '#' | '.' => (),
+                    c @ '#' | c @ '.' => current_line.push(c),
                     c => panic!("unexpected character {} seen in arena", c),
                 }
-                current_line.push(c);
             }
         }
-        Arena {
-            field,
-            elves,
-            goblins,
-        }
+        Arena { field, units }
     }
 }
 
 impl fmt::Debug for Arena {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut result = Ok(());
-        for line in self.field.iter() {
-            result = result.or(write!(f, "{}\n", line.iter().collect::<String>()));
+        for (y, line) in self.field.iter().enumerate() {
+            for (x, c) in line.iter().enumerate() {
+                // let output = *c;
+                let output = if self.units.contains_key(&(x, y)) {
+                    self.units.get(&(x, y)).unwrap().faction.as_char()
+                } else {
+                    *c
+                };
+                result = result.or(write!(f, "{}", output));
+            }
+            result = result.or(write!(f, "\n"));
         }
-        result = result.or(write!(f, "E: "));
-        for e in &self.elves {
-            result = result.or(write!(f, "[{}: {:3>}] ", e.id, e.hp));
+        for unit in self.units.values() {
+            result = result.or(write!(f, "{:?} ", unit))
         }
-        result = result.or(write!(f, "\nG: "));
-        for g in &self.goblins {
-            result = result.or(write!(f, "[{}: {:3>}] ", g.id, g.hp));
-        }
-        result = result.or(write!(f, "\n"));
         result
     }
 }
