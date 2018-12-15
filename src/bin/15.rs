@@ -1,7 +1,43 @@
 use aoc::*;
-use std::collections::hash_map::Entry;
-use std::collections::HashMap;
+use pathfinding::prelude::bfs;
+use std::collections::BTreeMap;
 use std::fmt;
+
+#[derive(Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
+struct Point {
+    y: usize,
+    x: usize,
+}
+
+impl fmt::Debug for Point {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({},{})", self.x, self.y)
+    }
+}
+
+impl Point {
+    fn new(x: usize, y: usize) -> Point {
+        Point { x, y }
+    }
+
+    fn neighbours(&self, xlimit: usize, ylimit: usize) -> Vec<Point> {
+        let mut points = vec![];
+        if self.x > 0 {
+            points.push(Point::new(self.x - 1, self.y))
+        };
+        if self.x < xlimit {
+            points.push(Point::new(self.x + 1, self.y))
+        };
+        if self.y > 0 {
+            points.push(Point::new(self.x, self.y - 1))
+        };
+        if self.y < ylimit {
+            points.push(Point::new(self.x, self.y + 1))
+        };
+        // eprintln!("neighbours for {:?}: {:?}", self, points);
+        points
+    }
+}
 
 #[derive(Debug, PartialEq)]
 enum Faction {
@@ -42,6 +78,13 @@ impl Combatant {
         }
     }
 
+    fn enemy(&self) -> Faction {
+        match self.faction {
+            Faction::Elf => Faction::Goblin,
+            Faction::Goblin => Faction::Elf,
+        }
+    }
+
     fn maybe_kill(&self, other: &mut Combatant) -> bool {
         // No friendly fire!
         assert!(self.faction != other.faction);
@@ -62,28 +105,104 @@ impl fmt::Debug for Combatant {
 
 struct Arena {
     field: Vec<Vec<char>>,
-    units: HashMap<(usize, usize), Combatant>,
+    units: BTreeMap<Point, Combatant>,
+    max_x: usize,
+    max_y: usize,
 }
 
 impl Arena {
     fn from_str(input: &str) -> Arena {
         let mut field = vec![];
-        let mut units = HashMap::new();
+        let mut units = BTreeMap::new();
         for (y, line) in input.lines().enumerate() {
             field.push(vec![]);
             let current_line = &mut field[y];
-            for (x, c) in line.chars().enumerate() {
+            for (x, c) in line.trim().chars().enumerate() {
                 match c {
                     c @ 'E' | c @ 'G' => {
                         current_line.push('.');
-                        units.insert((x, y), Combatant::new(c));
+                        units.insert(Point::new(x, y), Combatant::new(c));
                     }
                     c @ '#' | c @ '.' => current_line.push(c),
                     c => panic!("unexpected character {} seen in arena", c),
                 }
             }
         }
-        Arena { field, units }
+        // Does arena exist?
+        assert!(field.len() > 0);
+        // Are all lines of equal length?
+        let max_x = field[0].len() - 1;
+        let max_y = field.len() - 1;
+        assert!(field.iter().all(|l| l.len() == max_x + 1));
+        Arena {
+            field,
+            units,
+            max_y,
+            max_x,
+        }
+    }
+
+    fn is_free(&self, point: &Point) -> bool {
+        if self.units.contains_key(point) {
+            return false;
+        };
+        if self.field[point.y][point.x] != '.' {
+            return false;
+        };
+        true
+    }
+
+    fn free_spots_around(&self, point: &Point) -> Vec<Point> {
+        let mut targets = vec![];
+        for p in point.neighbours(self.max_x, self.max_y) {
+            if self.is_free(&p) {
+                targets.push(p);
+            }
+        }
+        // eprintln!("Free spots for {:?}: {:?}", point, targets);
+        targets
+    }
+
+    fn all_enemies(&self, point: &Point) -> Vec<Point> {
+        eprintln!("{:?}", point);
+        let unit = self.units.get(point);
+        assert!(unit.is_some());
+        let other_faction = unit.unwrap().enemy();
+        self.units
+            .iter()
+            .filter_map(|(p, u)| {
+                if u.faction == other_faction {
+                    Some(p.clone())
+                } else {
+                    None
+                }
+            })
+            .collect()
+    }
+
+    fn maybe_move_unit_at(&self, point: &Point) -> Vec<Point> {
+        // Check nearest surroundings for enemies.
+        //
+        // Need to move.
+        // Determine all target squares.
+        let mut targets = vec![];
+        for enemy in self.all_enemies(point) {
+            eprintln!("Considering enemy at {:?}", enemy);
+            targets.append(&mut self.free_spots_around(&enemy))
+        }
+        // Determine all paths towards target squares.
+        let mut paths = vec![];
+        for target in &targets {
+            let path = bfs(point, |p| self.free_spots_around(&p), |p| p == target);
+            paths.push(path);
+            // if path.is_some() {
+            //     let mut path = path.unwrap();
+            //     path.remove(0);
+            //     paths.push(path);
+            // }
+        }
+        eprintln!("paths: {:?}", paths);
+        vec![Point::new(0, 0)]
     }
 }
 
@@ -93,8 +212,8 @@ impl fmt::Debug for Arena {
         for (y, line) in self.field.iter().enumerate() {
             for (x, c) in line.iter().enumerate() {
                 // let output = *c;
-                let output = if self.units.contains_key(&(x, y)) {
-                    self.units.get(&(x, y)).unwrap().faction.as_char()
+                let output = if self.units.contains_key(&Point::new(x, y)) {
+                    self.units.get(&Point::new(x, y)).unwrap().faction.as_char()
                 } else {
                     *c
                 };
@@ -109,46 +228,49 @@ impl fmt::Debug for Arena {
     }
 }
 
-fn part1(foo: &i32) -> i32 {
-    *foo
+fn part1(arena: &mut Arena) -> i32 {
+    loop {
+        for position in arena.units.keys() {
+            eprintln!(
+                "{:?} from {:?} ",
+                arena.units.get(position).unwrap(),
+                position
+            );
+            // identify all enemy units
+            // identify all target squares
+            arena.maybe_move_unit_at(&position);
+
+            // work out all paths towards those squares
+            // pick the shortest one
+            // move
+            // check for targets around
+            // deal damage
+        }
+        break;
+    }
+    42
 }
 
-// fn part2(foo: &i32) -> i32 {
-//     *foo
-// }
-
 fn main() {
-    let arena = Arena::from_str(&read_file("inputs/15"));
+    let mut arena = Arena::from_str(&read_file("inputs/15"));
     println!("{:?}", arena);
-    // let answer1 = part1(&foo);
+    let answer1 = part1(&mut arena);
     // assert_eq!(answer1, 3671);
     // println!("Part 1: {}", answer1);
-
-    // let answer2 = part2(&foo);
-    // assert_eq!(answer2, 3671);
-    // println!("Part 2: {}", answer2);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    const INPUT: &str = r#"
-Well here we are again
-It's always such a pleasure
-Remember when you tried
-to kill me twice?
-"#;
-
     #[test]
-    fn test_part1() {
-        let lyrics = parse_input(INPUT);
-        assert_eq!(part1(&lyrics), 94);
+    fn test_move() {
+        let INPUT = r#"#######
+                       #.....#
+                       #...E.#
+                       #...G.#
+                       #######"#;
+        let mut arena = Arena::from_str(INPUT);
+        assert_eq!(arena.maybe_move_unit_at(&Point::new(4, 2)), vec![]);
     }
-
-    // #[test]
-    // fn test_part2() {
-    //     let lyrics = parse_input(INPUT);
-    //     assert_eq!(part2(&lyrics), 94);
-    // }
 }

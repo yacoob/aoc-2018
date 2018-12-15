@@ -12,6 +12,14 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 15th of December, puzzle #15
+* Well, that's it - I have other things to do, and today's puzzle brings me
+  nothing in terms of learning Rust. A complex _"build this state, then perturb
+  it along following guidelines and collapse it to an int"_. Considering I'm
+  oncall next week, I want to get some rest this weekend. I'll do this puzzle
+  later at some point, most likely :3
+
+
 ## 14th of December, puzzle #14
 * **Puzzle:** linear search for a pattern in a growing list of numbers.
 * **Solution:** Iterative, bit slow due to reslicing of ever-growing vector.
