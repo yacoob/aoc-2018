@@ -19,6 +19,9 @@ solutions to be more idiomatic. Or faster. Or both.
 * I'm under impression that this should be faster; `kitchen.scores` is growing,
   but I'm always chopping off same amount of elements, and single element access
   is `O(1)` for a vector.
+* After some very crude profiling, it turned out that `%` is expensive, and
+  I can shave up to 30% of the wallclock time. Code turned ugly though, with
+  added temporary variables and extra `if`s.
 
 ## 13th of December, puzzle #13
 * **Puzzle:** you're in maze of cart tracks, all alike.
