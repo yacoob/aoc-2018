@@ -28,10 +28,9 @@ impl Stopwatch {
     }
 }
 
-#[derive(Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Point {
-    y: usize,
-    x: usize,
+    pub x: usize,
+    pub y: usize,
 }
 
 impl fmt::Debug for Point {

@@ -1,7 +1,6 @@
 use aoc::*;
 use std::fmt;
 
-#[derive(PartialEq)]
 struct Combatant {
     position: Point,
     faction: char,
@@ -42,7 +41,7 @@ impl Arena {
                     c @ 'E' | c @ 'G' => {
                         units.push(Combatant::new(Point::new(x, y), c));
                     }
-                    c @ '#' | c @ '.' => (),
+                    '#' | '.' => (),
                     c => panic!("unexpected character {} seen in arena", c),
                 }
                 grid_line.push(c);
@@ -62,8 +61,14 @@ impl fmt::Debug for Arena {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut result = Ok(());
         for (y, line) in self.grid.iter().enumerate() {
-            result = result.or(writeln!(f, "{} ", line.iter().collect::<String>()));
-            // for unit in units.filter(|u| u.position.y == y) {}
+            result = result.or(write!(f, "{}   ", line.iter().collect::<String>()));
+            let mut units_on_this_line: Vec<&Combatant> =
+                self.units.iter().filter(|u| u.position.y == y).collect();
+            units_on_this_line.sort_by_key(|u| u.position.x);
+            for unit in units_on_this_line {
+                result = result.or(write!(f, "{:?} ", unit));
+            }
+            result = result.or(writeln!(f, ""));
         }
         result
     }
