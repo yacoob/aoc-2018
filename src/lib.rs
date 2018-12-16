@@ -41,11 +41,11 @@ impl fmt::Debug for Point {
 }
 
 impl Point {
-    fn new(x: usize, y: usize) -> Point {
+    pub fn new(x: usize, y: usize) -> Point {
         Point { x, y }
     }
 
-    fn neighbours(&self) -> Vec<Point> {
+    pub fn neighbours(&self) -> Vec<Point> {
         vec![
             Point::new(self.x - 1, self.y),
             Point::new(self.x + 1, self.y),
