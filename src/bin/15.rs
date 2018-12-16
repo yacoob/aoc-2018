@@ -1,43 +1,5 @@
 use aoc::*;
-use pathfinding::prelude::bfs;
-use std::collections::BTreeMap;
 use std::fmt;
-
-#[derive(Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct Point {
-    y: usize,
-    x: usize,
-}
-
-impl fmt::Debug for Point {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({},{})", self.x, self.y)
-    }
-}
-
-impl Point {
-    fn new(x: usize, y: usize) -> Point {
-        Point { x, y }
-    }
-
-    fn neighbours(&self, xlimit: usize, ylimit: usize) -> Vec<Point> {
-        let mut points = vec![];
-        if self.x > 0 {
-            points.push(Point::new(self.x - 1, self.y))
-        };
-        if self.x < xlimit {
-            points.push(Point::new(self.x + 1, self.y))
-        };
-        if self.y > 0 {
-            points.push(Point::new(self.x, self.y - 1))
-        };
-        if self.y < ylimit {
-            points.push(Point::new(self.x, self.y + 1))
-        };
-        // eprintln!("neighbours for {:?}: {:?}", self, points);
-        points
-    }
-}
 
 #[derive(Debug, PartialEq)]
 enum Faction {

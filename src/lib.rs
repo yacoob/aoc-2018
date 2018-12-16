@@ -1,3 +1,4 @@
+use std::fmt;
 use std::fs::File;
 use std::io::prelude::*;
 use std::time::Instant;
@@ -24,5 +25,32 @@ impl Stopwatch {
     pub fn split(self) {
         let d = self.clock.elapsed();
         eprintln!("Done in {}.{:06} seconds", d.as_secs(), d.subsec_micros());
+    }
+}
+
+#[derive(Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct Point {
+    y: usize,
+    x: usize,
+}
+
+impl fmt::Debug for Point {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({},{})", self.x, self.y)
+    }
+}
+
+impl Point {
+    fn new(x: usize, y: usize) -> Point {
+        Point { x, y }
+    }
+
+    fn neighbours(&self) -> Vec<Point> {
+        vec![
+            Point::new(self.x - 1, self.y),
+            Point::new(self.x + 1, self.y),
+            Point::new(self.x, self.y - 1),
+            Point::new(self.x, self.y + 1),
+        ]
     }
 }
