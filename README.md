@@ -44,7 +44,7 @@ solutions to be more idiomatic. Or faster. Or both.
 
 ## 14th of December, puzzle #14
 * **Puzzle:** linear search for a pattern in a growing list of numbers.
-* **Solution:** Iterative, bit slow due to reslicing of ever-growing vector.
+* **Solution:** Iterate, grow vector, check its tail.
 
 * I'm under impression that this should be faster; `kitchen.scores` is growing,
   but I'm always chopping off same amount of elements, and single element access
@@ -55,7 +55,7 @@ solutions to be more idiomatic. Or faster. Or both.
 
 ## 13th of December, puzzle #13
 * **Puzzle:** you're in maze of cart tracks, all alike.
-* **Solution:** Iterative; lot of ascii gazing.
+* **Solution:** Iterate, check state.
 
 * Next week might be challenging, as I'm oncall. :/
 * Not that much of a puzzle; it just requires tedious checking at both parsing
@@ -79,7 +79,8 @@ solutions to be more idiomatic. Or faster. Or both.
 
 ## 12th of December, puzzle #12
 * **Puzzle:** 1D life.
-* **Solution:** Iterative with some optimisation based on observations.
+* **Solution:** Iterative at first, detecting a pattern and calculating the answer
+directly for part B.
 
 * Very tired today. Considering taking some time off from AoC.
 * It's not a solid general solution; I've observed that the pattern is sprinting
@@ -97,7 +98,7 @@ solutions to be more idiomatic. Or faster. Or both.
 
 ## 11th of December, puzzle #11
 * **Puzzle:** Min-maxing fixed area across a surface.
-* **Solution**: Iterative + summed-area table.
+* **Solution**: Summed-area table.
 
 * Tapioca brain day. First I've found a semi-sensible `O(n^3)` algorithm, then
   reddit suggested a
@@ -109,7 +110,7 @@ solutions to be more idiomatic. Or faster. Or both.
 
 ## 10th of December, puzzle #10
 * **Puzzle:** Star-writing: collapsing starfield versus image recognition.
-* **Solution:** Iterative + modest application of human eye 8)
+* **Solution:** Iterate, detect smallest bounding box, ocr by human.
 
 * The puzzle itself was really simple. Used `image` crate instead of producing
   an ascii art. Added some appropriate quotes to the functions comments.
@@ -127,7 +128,7 @@ solutions to be more idiomatic. Or faster. Or both.
 
 ## 9th of December, puzzle #9
 * **Puzzle:** Elves playing horribly worded fully deterministic solitare game.
-* **Solution:** Iterative; `Vec` based too slow, `VecDeque` acceptable.
+* **Solution:** Iterate using `VecDeque`as storage to avoid O(n) operations.
 
 * Nothing like spending half an hour debugging your solution, only to discover
   that you left a function unimplemented, always returning `0`. :D
@@ -280,7 +281,7 @@ out something else. Probably slow down.
 
 ## 3th of December, puzzle #3
 * **Puzzle:** Fabric cutting: rectangles overlap and such.
-* **Solution:** Iterative map painting, straight-forward.
+* **Solution:** Iterative map painting.
 
 * Started late, had a break just before end of part A. Not sure how sustainable
   it'll be to do those puzzles in the evenings; I have a late thing tomorrow.
