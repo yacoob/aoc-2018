@@ -10,12 +10,12 @@ struct Combatant {
 }
 
 impl Combatant {
-    fn new(position: Point, faction: char) -> Combatant {
+    fn new(position: Point, faction: char, ap: isize) -> Combatant {
         Combatant {
             faction,
             position,
+            ap,
             hp: 200,
-            ap: 3,
         }
     }
 }
@@ -36,16 +36,15 @@ struct Arena {
 impl Arena {
     // Input parsing. We keep units positions twice, once in self.units[i].position, and as E/G
     // character in self.grid. It's a redundancy, but makes obstacles checking shorter.
-    fn from_str(input: &str) -> Arena {
+    fn from_str(input: &str, elf_power: isize) -> Arena {
         let mut grid = vec![];
         let mut units = vec![];
         for (y, line) in input.lines().enumerate() {
             let mut grid_line = vec![];
             for (x, c) in line.trim().chars().enumerate() {
                 match c {
-                    c @ 'E' | c @ 'G' => {
-                        units.push(Combatant::new(Point::new(x, y), c));
-                    }
+                    'E' => units.push(Combatant::new(Point::new(x, y), 'E', elf_power)),
+                    'G' => units.push(Combatant::new(Point::new(x, y), 'G', 3)),
                     '#' | '.' => (),
                     c => panic!("unexpected character {} seen in arena", c),
                 }
@@ -165,10 +164,10 @@ impl Arena {
             // Move if feasible.
             let target_distance = distances[target_tile.y][target_tile.x];
             if target_distance > 0 && target_distance < std::usize::MAX {
-                eprintln!(
-                    "Moving {} from {:?} to {:?}",
-                    unit_faction, unit_position, target_tile
-                );
+                // eprintln!(
+                //     "Moving {} from {:?} to {:?}",
+                //     unit_faction, unit_position, target_tile
+                // );
                 let (x, y) = match origins[target_tile.y][target_tile.x] {
                     Some(0) => (unit_position.x, unit_position.y - 1), // above
                     Some(1) => (unit_position.x - 1, unit_position.y), // left
@@ -214,6 +213,15 @@ impl Arena {
         eprintln!("{:?}", self);
         true
     }
+
+    fn outcome(&self) -> usize {
+        let hp_sum: usize = self
+            .units
+            .iter()
+            .filter_map(|u| if u.hp > 0 { Some(u.hp as usize) } else { None })
+            .sum();
+        hp_sum * self.clock
+    }
 }
 
 // Pretty printer for the arena.
@@ -250,21 +258,53 @@ fn neighbours_in_reading_order(p: &Point) -> Vec<Point> {
     ]
 }
 
-fn part1(arena: &mut Arena) -> usize {
+fn part1(input: &str) -> usize {
+    let mut arena = Arena::from_str(input, 3);
     while arena.tick() {}
-    let hp_sum: usize = arena
+    arena.outcome()
+}
+
+fn part2(input: &str) -> usize {
+    let mut elf_ap = 4;
+    let mut arena = Arena::from_str(&input, elf_ap);
+    let elven_army_size = arena
         .units
         .iter()
-        .filter_map(|u| if u.hp > 0 { Some(u.hp as usize) } else { None })
-        .sum();
-    hp_sum * arena.clock
+        .filter(|u| u.faction == 'E')
+        .fold(0, |acc, _| acc + 1);
+    eprintln!("Starting elvish army size: {}", elven_army_size);
+    loop {
+        eprintln!("Trying out elf_ap={}", elf_ap);
+        while arena.tick() {}
+
+        let surviving_elves: Vec<_> = arena
+            .units
+            .iter()
+            .filter(|u| u.hp > 0 && u.faction == 'E')
+            .collect();
+        eprintln!(
+            "{} surviving elves: {:?}",
+            surviving_elves.len(),
+            surviving_elves
+        );
+        if surviving_elves.len() == elven_army_size {
+            break;
+        } else {
+            elf_ap += 1;
+            arena = Arena::from_str(&input, elf_ap);
+        }
+    }
+    arena.outcome()
 }
 
 fn main() {
-    let mut arena = Arena::from_str(&read_file("inputs/15"));
-    let answer1 = part1(&mut arena);
+    let input = read_file("inputs/15");
+    let answer1 = part1(&input);
     assert_eq!(answer1, 195774);
-    println!("Part 1: {}", answer1);
+    println!("Outcome of battle for part 1: {}", answer1);
+    let answer2 = part2(&input);
+    assert_eq!(answer2, 37272);
+    println!("Outcome of battle for part 2: {}", answer2);
 }
 
 #[cfg(test)]
@@ -273,22 +313,23 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        let input = r#"#######
-                       #.G...#
-                       #...EG#
-                       #.#.#G#
-                       #..G#E#
-                       #.....#
-                       #######"#;
-        assert_eq!(part1(&mut Arena::from_str(input)), 27730);
-        let input = r#"#######
-                       #G..#E#
-                       #E#E.E#
-                       #G.##.#
-                       #...#E#
-                       #...E.#
-                       #######"#;
-        assert_eq!(part1(&mut Arena::from_str(input)), 36334);
+        // let input = r#"#######
+        //                #.G...#
+        //                #...EG#
+        //                #.#.#G#
+        //                #..G#E#
+        //                #.....#
+        //                #######"#;
+        // assert_eq!(part1(&input), 27730);
+        // assert_eq!(part2(&input), 4988);
+        // let input = r#"#######
+        //                #G..#E#
+        //                #E#E.E#
+        //                #G.##.#
+        //                #...#E#
+        //                #...E.#
+        //                #######"#;
+        // assert_eq!(part1(&input), 36334);
         let input = r#"#######
                        #E..EG#
                        #.#G.E#
@@ -296,35 +337,38 @@ mod tests {
                        #G..#.#
                        #..E#.#
                        #######"#;
-        assert_eq!(part1(&mut Arena::from_str(input)), 39514);
+        //assert_eq!(part1(&input), 39514);
+        assert_eq!(part2(&input), 31284);
+        // let input = r#"#######
+        //                #E.G#.#
+        //                #.#G..#
+        //                #G.#.G#
+        //                #G..#.#
+        //                #...E.#
+        //                #######"#;
+        // assert_eq!(part1(&input), 27755);
+        // assert_eq!(part2(&input), 3478);
 
-        let input = r#"#######
-                       #E.G#.#
-                       #.#G..#
-                       #G.#.G#
-                       #G..#.#
-                       #...E.#
-                       #######"#;
-        assert_eq!(part1(&mut Arena::from_str(input)), 27755);
+        // let input = r#"#######
+        //                #.E...#
+        //                #.#..G#
+        //                #.###.#
+        //                #E#G#G#
+        //                #...#G#
+        //                #######"#;
+        // assert_eq!(part1(&input), 28944);
+        // assert_eq!(part2(&input), 6474);
 
-        let input = r#"#######
-                       #.E...#
-                       #.#..G#
-                       #.###.#
-                       #E#G#G#
-                       #...#G#
-                       #######"#;
-        assert_eq!(part1(&mut Arena::from_str(input)), 28944);
-
-        let input = r#"#########
-                       #G......#
-                       #.E.#...#
-                       #..##..G#
-                       #...##..#
-                       #...#...#
-                       #.G...G.#
-                       #.....G.#
-                       #########"#;
-        assert_eq!(part1(&mut Arena::from_str(input)), 18740);
+        // let input = r#"#########
+        //                #G......#
+        //                #.E.#...#
+        //                #..##..G#
+        //                #...##..#
+        //                #...#...#
+        //                #.G...G.#
+        //                #.....G.#
+        //                #########"#;
+        // assert_eq!(part1(&input), 18740);
+        // assert_eq!(part2(&input), 1140);
     }
 }
