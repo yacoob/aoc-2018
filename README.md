@@ -12,7 +12,29 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 17th of December, puzzle #15
+* Next entry in this log is expected no earlier than 21st of December. Even if
+  oncall is light, I want to get some rest.
+* Half of `#15` done; this was a pain in the side to debug and iterate.
+* One reason for doing it: initially my plan was to just use a `pathfinding`
+  crate to establish 1:1 paths for every pair of combatants. Turned out that
+  a flood fill is more efficient, as a single fill of the arena will give paths
+  for all pairs of given unit and all of their enemies.
+* Good reading material about pathing:
+  [this](https://www.redblobgames.com/pathfinding/tower-defense/)
+  and
+  [this](https://www.redblobgames.com/pathfinding/a-star/introduction.html).
+  Even though I haven't used a fancy algorithm like `A*`, it was educational to
+  read about these and learn why do they work.
+* [This reddit thread](https://www.reddit.com/r/adventofcode/comments/a6urok/2018_day_15_something_thats_not_very_clear_and/)
+  was also essential in providing enlightement as to why my code passes all
+  test input but misses the actual puzzle answer by a little bit.
+
+
 ## 15th of December, puzzle #15
+* **Puzzle:** Roguelike lite.
+* **Solution:** Carefully transcribe game rules to code, iterate.
+
 * Well, that's it - I have other things to do, and today's puzzle brings me
   nothing in terms of learning Rust. A complex _"build this state, then perturb
   it along following guidelines and collapse it to an int"_. Considering I'm
