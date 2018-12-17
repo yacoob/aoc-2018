@@ -28,6 +28,7 @@ impl Stopwatch {
     }
 }
 
+#[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Point {
     pub x: usize,
     pub y: usize,
@@ -51,5 +52,10 @@ impl Point {
             Point::new(self.x, self.y - 1),
             Point::new(self.x, self.y + 1),
         ]
+    }
+
+    pub fn distance_to(&self, other: Point) -> usize {
+        ((self.x as isize - other.x as isize).abs() + (self.y as isize - other.y as isize).abs())
+            as usize
     }
 }
