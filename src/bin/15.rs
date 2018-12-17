@@ -239,15 +239,7 @@ fn part1(arena: &mut Arena) -> usize {
 }
 
 fn main() {
-    let INPUT = r#"#######
-                   #.G...#
-                   #...EG#
-                   #.#.#G#
-                   #..G#E#
-                   #.....#
-                   #######"#;
-    // let mut arena = Arena::from_str(&read_file("inputs/15"));
-    let mut arena = Arena::from_str(INPUT);
+    let mut arena = Arena::from_str(&read_file("inputs/15"));
     let answer1 = part1(&mut arena);
     // assert_eq!(answer1, 3671);
     println!("Part 1: {}", answer1);
