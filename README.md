@@ -16,10 +16,11 @@ solutions to be more idiomatic. Or faster. Or both.
 * Next entry in this log is expected no earlier than 21st of December. Even if
   oncall is light, I want to get some rest.
 * Half of `#15` done; this was a pain in the side to debug and iterate.
-* One reason for doing it: initially my plan was to just use a `pathfinding`
-  crate to establish 1:1 paths for every pair of combatants. Turned out that
-  a flood fill is more efficient, as a single fill of the arena will give paths
-  for all pairs of given unit and all of their enemies.
+* One good reason for doing this puzzle after all: initially my plan was to
+  just use a `pathfinding` crate to establish 1:1 paths for every pair of
+  combatants. Turned out that a flood fill is more efficient, as a single
+  fill of the arena will give paths for all pairs of given unit and all of
+  their enemies. So that was educational.
 * Good reading material about pathing:
   [this](https://www.redblobgames.com/pathfinding/tower-defense/)
   and
