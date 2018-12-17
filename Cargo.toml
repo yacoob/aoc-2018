@@ -7,4 +7,3 @@ edition = "2018"
 [dependencies]
 image = "*"
 regex = "1"
-pathfinding = "1.1.6"
