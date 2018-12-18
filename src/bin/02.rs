@@ -5,7 +5,7 @@ fn parse_input(input: &str) -> Vec<&str> {
     input.trim().lines().map(|l| l.trim()).collect()
 }
 
-fn part1(box_ids: &Vec<&str>) -> (i32, i32) {
+fn part1(box_ids: &[&str]) -> (i32, i32) {
     let mut two_repeats = 0;
     let mut three_repeats = 0;
     for id in box_ids.iter() {
@@ -42,7 +42,7 @@ fn contain_prototype_fabric(a: &str, b: &str) -> Option<char> {
     }
 }
 
-fn part2(box_ids: &Vec<&str>) -> Option<String> {
+fn part2(box_ids: &[&str]) -> Option<String> {
     for (pos, id_a) in box_ids.iter().enumerate() {
         for id_b in box_ids[pos + 1..].iter() {
             match contain_prototype_fabric(id_a, id_b) {
