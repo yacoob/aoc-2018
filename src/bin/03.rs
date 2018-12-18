@@ -1,4 +1,3 @@
-extern crate regex;
 use aoc::*;
 use regex::Regex;
 use std::collections::HashSet;
@@ -28,20 +27,20 @@ fn parse_input(input: &str) -> Vec<Rectangle> {
     rectangles
 }
 
-fn part1(rectangles: &Vec<Rectangle>) -> usize {
+fn part1(rectangles: &[Rectangle]) -> usize {
     // Paint the fabric; add 1 for every rectangle covering given square.
     let mut fabric = vec![vec![0usize; 1000]; 1000];
     for r in rectangles {
-        for i in r.x..r.x + r.w {
-            for j in r.y..r.y + r.h {
-                fabric[i][j] += 1;
+        for row in fabric[r.x..r.x + r.w].iter_mut() {
+            for element in row[r.y..r.y + r.h].iter_mut() {
+                *element += 1;
             }
         }
     }
     fabric.iter().flatten().filter(|&&x| x > 1).count()
 }
 
-fn part2(rectangles: &Vec<Rectangle>) -> usize {
+fn part2(rectangles: &[Rectangle]) -> usize {
     // Paint the fabric with rectangle ids. Just like with normal paint, only last (topmost) id is
     // visible. If we're painting over an existing id, mark both old rectangle id and current one
     // as tainted.
@@ -49,14 +48,13 @@ fn part2(rectangles: &Vec<Rectangle>) -> usize {
     let mut tainted: HashSet<usize> = HashSet::new();
     for r in rectangles {
         let mut current_is_tainted = false;
-        for i in r.x..r.x + r.w {
-            for j in r.y..r.y + r.h {
-                let old_id = fabric[i][j];
-                if old_id > 0 {
-                    tainted.insert(old_id);
+        for row in fabric[r.x..r.x + r.w].iter_mut() {
+            for element in row[r.y..r.y + r.h].iter_mut() {
+                if *element > 0 {
+                    tainted.insert(*element);
                     current_is_tainted = true;
                 }
-                fabric[i][j] = r.id;
+                *element = r.id;
             }
         }
         if current_is_tainted {
@@ -72,7 +70,7 @@ fn part2(rectangles: &Vec<Rectangle>) -> usize {
 fn main() {
     let rectangles = parse_input(&read_file("inputs/03"));
     let overlaps = part1(&rectangles);
-    assert_eq!(overlaps, 111326);
+    assert_eq!(overlaps, 111_326);
     println!("Found {} overlapping square inches.", overlaps);
 
     let viable = part2(&rectangles);
