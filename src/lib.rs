@@ -1,6 +1,8 @@
 use std::fmt;
 use std::fs::File;
 use std::io::prelude::*;
+use std::num::ParseIntError;
+use std::str::FromStr;
 use std::time::Instant;
 
 pub fn read_file(path: &str) -> String {
@@ -40,14 +42,22 @@ impl fmt::Debug for Point {
     }
 }
 
+impl FromStr for Point {
+    type Err = ParseIntError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let parts: Vec<&str> = s
+            .trim_matches(|p| p == '(' || p == ')')
+            .split(',')
+            .collect();
+        let x = parts[0].trim().parse::<usize>()?;
+        let y = parts[1].trim().parse::<usize>()?;
+        Ok(Point { x, y })
+    }
+}
+
 impl Point {
     pub fn new(x: usize, y: usize) -> Point {
         Point { x, y }
-    }
-
-    pub fn from_str(s: &str) -> Point {
-        let p: Vec<usize> = s.split(", ").map(|s| s.parse::<usize>().unwrap()).collect();
-        Point { x: p[0], y: p[1] }
     }
 
     pub fn neighbours(&self) -> Vec<Point> {

@@ -1,10 +1,11 @@
 use aoc::*;
+use std::str::FromStr;
 
 fn parse_input(input: &str) -> Vec<Point> {
-    input.trim().lines().map(|s| Point::from_str(s)).collect()
+    input.trim().lines().map(|s| Point::from_str(s).unwrap()).collect()
 }
 
-fn part_ab(seeds: &Vec<Point>, safe_area_within: usize) -> (usize, usize) {
+fn part_ab(seeds: &[Point], safe_area_within: usize) -> (usize, usize) {
     // Go through entire square piece of the map; for every point calculate distance to all seed
     // points and:
     // * for part A: pick closest seed, score one more point for that seed.

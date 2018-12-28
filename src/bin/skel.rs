@@ -1,28 +1,25 @@
 use aoc::*;
 
-fn parse_input(input: &str) -> i32 {
-    input.len() as i32
+struct Data {
+    length: usize,
 }
 
-fn part1(foo: &i32) -> i32 {
-    *foo
+fn parse_input(input: &str) -> Data {
+    Data {
+        length: input.len(),
+    }
 }
 
-// fn part2(foo: &i32) -> i32 {
-//     *foo
-// }
+fn part1(data: &Data) -> usize {
+    data.length
+}
 
 fn main() {
-    let _param = 42;
-    let foo = parse_input(&read_file("inputs/01"));
+    let data = parse_input(&read_file("inputs/01"));
 
-    let answer1 = part1(&foo);
-    // assert_eq!(answer1, 3671);
+    let answer1 = part1(&data);
+    assert_eq!(answer1, 3672);
     println!("Part 1: {}", answer1);
-
-    // let answer2 = part2(&foo);
-    // assert_eq!(answer2, 3671);
-    // println!("Part 2: {}", answer2);
 }
 
 #[cfg(test)]
@@ -41,10 +38,4 @@ to kill me twice?
         let lyrics = parse_input(INPUT);
         assert_eq!(part1(&lyrics), 94);
     }
-
-    // #[test]
-    // fn test_part2() {
-    //     let lyrics = parse_input(INPUT);
-    //     assert_eq!(part2(&lyrics), 94);
-    // }
 }
