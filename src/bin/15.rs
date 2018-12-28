@@ -142,7 +142,7 @@ impl Arena {
                 .collect();
 
             // Are there any enemies? Maybe the bloody fight is over?
-            if enemies.len() == 0 {
+            if enemies.is_empty() {
                 return false;
             }
 
@@ -195,7 +195,7 @@ impl Arena {
                 .collect();
 
             // Damage the weakest.
-            if targets.len() > 0 {
+            if !targets.is_empty() {
                 targets.sort_by_key(|u| u.hp);
                 eprintln!(
                     "{} damages enemy at {:?}",
@@ -228,9 +228,9 @@ impl Arena {
 impl fmt::Debug for Arena {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut result = Ok(());
-        result = result.or(writeln!(f, "Turn {}", self.clock));
+        result = result.or_else(|_| writeln!(f, "Turn {}", self.clock));
         for (y, line) in self.grid.iter().enumerate() {
-            result = result.or(write!(f, "{}   ", line.iter().collect::<String>()));
+            result = result.or_else(|_| write!(f, "{}   ", line.iter().collect::<String>()));
             let mut units_on_this_line: Vec<&Combatant> = self
                 .units
                 .iter()
@@ -238,9 +238,9 @@ impl fmt::Debug for Arena {
                 .collect();
             units_on_this_line.sort_by_key(|u| u.position.x);
             for unit in units_on_this_line {
-                result = result.or(write!(f, "{:?} ", unit));
+                result = result.or_else(|_| write!(f, "{:?} ", unit));
             }
-            result = result.or(writeln!(f, ""));
+            result = result.or_else(|_| writeln!(f));
         }
         result
     }
@@ -300,10 +300,10 @@ fn part2(input: &str) -> usize {
 fn main() {
     let input = read_file("inputs/15");
     let answer1 = part1(&input);
-    assert_eq!(answer1, 195774);
+    assert_eq!(answer1, 195_774);
     println!("Outcome of battle for part 1: {}", answer1);
     let answer2 = part2(&input);
-    assert_eq!(answer2, 37272);
+    assert_eq!(answer2, 37_272);
     println!("Outcome of battle for part 2: {}", answer2);
 }
 
