@@ -45,6 +45,11 @@ impl Point {
         Point { x, y }
     }
 
+    pub fn from_str(s: &str) -> Point {
+        let p: Vec<usize> = s.split(", ").map(|s| s.parse::<usize>().unwrap()).collect();
+        Point { x: p[0], y: p[1] }
+    }
+
     pub fn neighbours(&self) -> Vec<Point> {
         vec![
             Point::new(self.x - 1, self.y),
@@ -54,7 +59,7 @@ impl Point {
         ]
     }
 
-    pub fn distance_to(&self, other: Point) -> usize {
+    pub fn distance_to(&self, other: &Point) -> usize {
         ((self.x as isize - other.x as isize).abs() + (self.y as isize - other.y as isize).abs())
             as usize
     }

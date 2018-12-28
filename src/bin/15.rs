@@ -190,7 +190,7 @@ impl Arena {
                 .filter(|u| {
                     u.faction != unit_faction
                         && u.hp > 0
-                        && unit_position.distance_to(u.position) == 1
+                        && unit_position.distance_to(&u.position) == 1
                 })
                 .collect();
 
