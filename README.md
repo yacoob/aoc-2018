@@ -12,6 +12,17 @@ Idea for later: if I end up liking Rust, come back and try to rewrite the
 solutions to be more idiomatic. Or faster. Or both.
 
 
+## 28th of December
+* **AN UPDATE ON ADVENT OF CODE SOLUTIONS.**
+* tl;dr: Oncall is over, holidays are partially over, I've lost my interest in
+  the meantime.
+* Realistically, this is as far as it'll get - right now I don't really have
+  a good motivation of pursuing the remaining puzzles. The goal has been
+  reached, that is I've learned a bit of Rust, and I had fun. Most likely the
+  next step for me is to redo one of my toy projects in Rust, for fun and no
+  profit.
+
+
 ## 17th of December, puzzle #15
 * Next entry in this log is expected no earlier than 21st of December. Even if
   oncall is light, I want to get some rest.
