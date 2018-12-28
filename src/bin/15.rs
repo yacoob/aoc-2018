@@ -313,62 +313,62 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        // let input = r#"#######
-        //                #.G...#
-        //                #...EG#
-        //                #.#.#G#
-        //                #..G#E#
-        //                #.....#
-        //                #######"#;
-        // assert_eq!(part1(&input), 27730);
-        // assert_eq!(part2(&input), 4988);
-        // let input = r#"#######
-        //                #G..#E#
-        //                #E#E.E#
-        //                #G.##.#
-        //                #...#E#
-        //                #...E.#
-        //                #######"#;
-        // assert_eq!(part1(&input), 36334);
         let input = r#"#######
-                       #E..EG#
-                       #.#G.E#
-                       #E.##E#
-                       #G..#.#
-                       #..E#.#
+                       #.G...#
+                       #...EG#
+                       #.#.#G#
+                       #..G#E#
+                       #.....#
                        #######"#;
-        //assert_eq!(part1(&input), 39514);
-        assert_eq!(part2(&input), 31284);
+        assert_eq!(part1(&input), 27730);
+        assert_eq!(part2(&input), 4988);
+        let input = r#"#######
+                       #G..#E#
+                       #E#E.E#
+                       #G.##.#
+                       #...#E#
+                       #...E.#
+                       #######"#;
+        assert_eq!(part1(&input), 36334);
         // let input = r#"#######
-        //                #E.G#.#
-        //                #.#G..#
-        //                #G.#.G#
+        //                #E..EG#
+        //                #.#G.E#
+        //                #E.##E#
         //                #G..#.#
-        //                #...E.#
+        //                #..E#.#
         //                #######"#;
-        // assert_eq!(part1(&input), 27755);
-        // assert_eq!(part2(&input), 3478);
+        //assert_eq!(part1(&input), 39514);
+        //assert_eq!(part2(&input), 31284);
+        let input = r#"#######
+                       #E.G#.#
+                       #.#G..#
+                       #G.#.G#
+                       #G..#.#
+                       #...E.#
+                       #######"#;
+        assert_eq!(part1(&input), 27755);
+        assert_eq!(part2(&input), 3478);
 
-        // let input = r#"#######
-        //                #.E...#
-        //                #.#..G#
-        //                #.###.#
-        //                #E#G#G#
-        //                #...#G#
-        //                #######"#;
-        // assert_eq!(part1(&input), 28944);
-        // assert_eq!(part2(&input), 6474);
+        let input = r#"#######
+                       #.E...#
+                       #.#..G#
+                       #.###.#
+                       #E#G#G#
+                       #...#G#
+                       #######"#;
+        assert_eq!(part1(&input), 28944);
+        assert_eq!(part2(&input), 6474);
 
-        // let input = r#"#########
-        //                #G......#
-        //                #.E.#...#
-        //                #..##..G#
-        //                #...##..#
-        //                #...#...#
-        //                #.G...G.#
-        //                #.....G.#
-        //                #########"#;
-        // assert_eq!(part1(&input), 18740);
-        // assert_eq!(part2(&input), 1140);
+        let input = r#"#########
+                       #G......#
+                       #.E.#...#
+                       #..##..G#
+                       #...##..#
+                       #...#...#
+                       #.G...G.#
+                       #.....G.#
+                       #########"#;
+        assert_eq!(part1(&input), 18740);
+        assert_eq!(part2(&input), 1140);
     }
 }
