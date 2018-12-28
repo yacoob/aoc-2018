@@ -1,4 +1,5 @@
 use aoc::*;
+use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::fmt;
 
@@ -24,7 +25,7 @@ impl fmt::Debug for Pots {
         let mut result = Ok(());
         for &s in self.state.iter() {
             let c = if s { "#" } else { "." };
-            result = result.or(write!(f, "{}", c))
+            result = result.or_else(|_| write!(f, "{}", c))
         }
         result
     }
@@ -53,7 +54,7 @@ fn parse_input(input: &str) -> Pots {
     // There should be exactly 2^5 patterns in the input, to cover all possibilities.
     assert_eq!(patterns.keys().len(), 32);
     Pots {
-        state: state,
+        state,
         offset: OFFSET,
         growth: patterns,
     }
@@ -82,7 +83,7 @@ fn grow(pots: &mut Pots, iterations: usize) -> usize {
             let bloom = pots.growth[window];
             if bloom {
                 sum += output_position - pots.offset;
-                first_true = first_true.or(Some(i));
+                first_true = first_true.or_else(|| Some(i));
                 last_true = Some(i);
             }
             next_state[output_position] = bloom;
@@ -94,17 +95,17 @@ fn grow(pots: &mut Pots, iterations: usize) -> usize {
         let key = next_state[*first_true.get_or_insert(0)..*last_true.get_or_insert(MAX_POT_COUNT)]
             .to_owned();
         // Have we seen it yet?
-        if !seen_patterns.contains_key(&key) {
+        match seen_patterns.entry(key) {
             // No; record it together with a sum.
-            seen_patterns.insert(key, sum);
-        } else {
+            Entry::Vacant(o) => o.insert(sum),
             // Yes; calculate the difference between current and past state.
-            let difference = sum - seen_patterns.get(&key).unwrap();
-            // Calculate the final result.
-            sum += (iterations - generation) * difference;
-            break;
-        }
-
+            Entry::Occupied(o) => {
+                let difference = sum - o.get();
+                // Calculate the final result.
+                sum += (iterations - generation) * difference;
+                break;
+            }
+        };
         pots.state = next_state;
     }
     sum

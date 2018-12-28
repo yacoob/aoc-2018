@@ -25,6 +25,7 @@ fn parse_input(input: i32) -> PowerGrid {
 }
 
 // Where's the most powerful 3x3 square of cells?
+#[allow(clippy::needless_range_loop)]
 fn part1(power_grid: &PowerGrid) -> (usize, usize) {
     // Brute force: sweep all locations that are suitable for top left corner of a 3x3 square on
     // the grid and calculate square's total power.
@@ -53,6 +54,7 @@ fn part1(power_grid: &PowerGrid) -> (usize, usize) {
 }
 
 // Where's the most powerful square of cells, sized [1..300]?
+#[allow(clippy::needless_range_loop)]
 fn part2(power_grid: &PowerGrid) -> (usize, usize, usize) {
     // Calculate summed-area table.
     // https://en.wikipedia.org/wiki/Summed-area_table

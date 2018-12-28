@@ -85,8 +85,10 @@ fn part2(schedule: &Schedule) -> usize {
     // guard_id -> number_of_times_slept_in_particular_minute
     let mut minutes_frequency: HashMap<usize, Vec<usize>> = HashMap::new();
     for (guard, days) in schedule.sleeping_patterns.iter() {
-        let minutes = &mut minutes_frequency.entry(*guard).or_insert(vec![0; 60]);
-        for (_, hour) in days {
+        let minutes = &mut minutes_frequency
+            .entry(*guard)
+            .or_insert_with(|| vec![0; 60]);
+        for hour in days.values() {
             for i in 0..hour.len() {
                 minutes[i] += hour[i];
             }

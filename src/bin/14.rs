@@ -78,7 +78,7 @@ fn main() {
     println!("Part 1: {}", answer1);
 
     let answer2 = part2(input);
-    assert_eq!(answer2, 20288091);
+    assert_eq!(answer2, 20_288_091);
     println!("Part 2: {}", answer2);
 }
 
